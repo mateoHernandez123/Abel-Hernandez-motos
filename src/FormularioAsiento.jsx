@@ -7,11 +7,16 @@ import {
   Grid,
   IconButton,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Context } from "./context/Context";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const FormularioAsiento = () => {
   const [filas, setFilas] = useState([
@@ -26,9 +31,11 @@ const FormularioAsiento = () => {
   // Estados iniciales
   const [fecha, setFecha] = useState(formattedDate);
   const [hora, setHora] = useState(formattedTime);
+  const [descripcion, setDescripcion] = useState("");
   const [error, setError] = useState(""); // Estado para manejar el error de sumatoria
   const [fechaUltimoAsiento, setFechaUltimoAsiento] = useState("");
   const [horaUltimoAsiento, setHoraUltimoAsiento] = useState("");
+  const [cuentasHojas, setCuentasHojas] = useState([]);
 
   // Actualizar la hora actual cada minuto
   useEffect(() => {
@@ -68,40 +75,21 @@ const FormularioAsiento = () => {
   // Manejar el cambio en el campo de hora
   const handleHoraChange = (e) => {
     const selectedTime = e.target.value;
+    setHora(selectedTime);
+  };
 
-    // Validar la hora dependiendo de la fecha seleccionada
-    if (fecha === fechaUltimoAsiento && selectedTime < horaUltimoAsiento) {
-      setError("La hora seleccionada es anterior al último asiento.");
-    } else if (fecha === formattedDate && selectedTime > formattedTime) {
-      setError("La hora seleccionada es en el futuro.");
-    } else {
-      setHora(selectedTime);
-      setError(""); // Limpiar error
-    }
+  // Función para manejar el cambio en el campo descripción
+  const handleDescripcionChange = (e) => {
+    setDescripcion(e.target.value);
   };
 
   // Manejar el cambio en los campos de una fila
   const handleFilaChange = async (index, event) => {
     const { name, value } = event.target;
     const nuevasFilas = [...filas];
-
-    if (name === "codigo" || name === "cuenta") {
-      nuevasFilas[index][name] = value;
-
-      // Simulación de petición al servidor para completar el otro campo
-      const cuentaSimulada = {
-        codigo: "1.01",
-        cuenta: "Caja",
-      };
-      // Si se ingresa el código, completar el nombre de la cuenta
-      if (name === "codigo") {
-        nuevasFilas[index].cuenta = cuentaSimulada.cuenta;
-      } else {
-        // Si se ingresa el nombre, completar el código
-        nuevasFilas[index].codigo = cuentaSimulada.codigo;
-      }
+    if (name === "cuenta") {
+      nuevasFilas[index].cuenta = value;
     }
-
     if (name === "debe") {
       nuevasFilas[index].debe = value;
       nuevasFilas[index].haber = "0";
@@ -139,30 +127,136 @@ const FormularioAsiento = () => {
     return { totalDebe, totalHaber };
   };
 
-  // Manejar el envío del formulario
-  const crearAsiento = (event) => {
+  // Función para manejar el envío al backend
+  const crearAsiento = async (event) => {
     event.preventDefault();
+    setError(null); // Limpiar cualquier error previo
 
     const { totalDebe, totalHaber } = calcularSumatorias();
 
+    // Verificar que el debe y el haber estén balanceados
     if (totalDebe !== totalHaber) {
       setError(
         `La sumatoria del Debe (${totalDebe}) debe ser igual a la del Haber (${totalHaber}).`
       );
-      return; // No permitir el envío del formulario
+      return;
     }
 
-    setError(""); // Limpiar el error si todo está bien
+    // Validar que el 'haber' no exceda el 'monto_actual' de la cuenta
+    for (const fila of filas) {
+      const cuenta = cuentasHojas.find((c) => c.codigo === fila.cuenta);
+
+      // Solo realizar la validación si la cuenta es encontrada
+      if (cuenta && parseFloat(fila.haber) > cuenta.monto_actual) {
+        setError(
+          `El monto en Haber excede el monto actual (${cuenta.monto_actual}) de la cuenta ${cuenta.nombre}.`
+        );
+        return;
+      }
+    }
+
+    // Preparar el objeto para enviar al backend
+    const data = {
+      Descripcion: descripcion,
+      Fecha: fecha,
+      Hora: hora,
+      Registros: filas.map((fila) => ({
+        Cuenta: fila.cuenta,
+        Debe: parseFloat(fila.debe),
+        Haber: parseFloat(fila.haber),
+      })),
+    };
+
+    // Aquí podrías descomentar la lógica de envío al servidor
+    /*
+  try {
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+    const response = await fetch(`${IP}/api/asientos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      Swal.fire("Éxito", "Asiento creado exitosamente", "success");
+    } else {
+      Swal.fire("Error", "Error al crear el asiento", "error");
+    }
+  } catch (error) {
+    Swal.fire(
+      "Error",
+      "No se pudo enviar la información al servidor",
+      "error"
+    );
+  }
+  */
   };
 
-  const { usuarioAutenticado, deslogear } = useContext(Context);
+  const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (!JSON.parse(localStorage.getItem("UsuarioAutenticado"))) {
-      deslogear();
-      navigate("/login", { replace: true });
-    }
-  }, [usuarioAutenticado, navigate]);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+
+    const verificarUsuario = async () => {
+      if (!JSON.parse(localStorage.getItem("UsuarioAutenticado"))) {
+        deslogear();
+        navigate("/login", { replace: true });
+      } else {
+        try {
+          const token = JSON.parse(localStorage.getItem("accessToken"));
+          let resultado = await fetch(`${IP}/api/cuentas/obtenerhojas`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, //Esto hay que hacerlo con todos, filtra las entradas
+            },
+          });
+          resultado = await resultado.json(); // Aquí estaba `.JSON()`, debe ser `.json()`
+
+          if (resultado.AuthErr) {
+            tokenError(resultado.MENSAJE);
+          } else if (resultado.ServErr) {
+            Toast.fire({
+              title: "Error",
+              icon: "error",
+              text: resultado.MENSAJE,
+            });
+          } else {
+            if (resultado.ERROR) {
+              Toast.fire({
+                icon: "warning",
+                title: "Atención",
+                text: resultado.MENSAJE,
+              });
+            }
+            setCuentasHojas(resultado.Hojas);
+          }
+        } catch (err) {
+          console.log(err);
+          Toast.fire({
+            title: "Error en la carga de datos. Recargar la pagina",
+            icon: "warning",
+          });
+        }
+      }
+    };
+
+    verificarUsuario(); // Llama a la función asíncrona
+  }, [usuarioAutenticado, deslogear, navigate, IP, Swal]); // Asegúrate de agregar todas las dependencias necesarias
 
   return (
     <Box
@@ -220,27 +314,45 @@ const FormularioAsiento = () => {
           required
         />
 
+        {/* Campo de descripcion */}
+        <TextField
+          label="Descripcion"
+          type="text"
+          name="descripcion"
+          value={descripcion}
+          onChange={handleDescripcionChange}
+          fullWidth
+          sx={{ marginBottom: 2 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+
         {/* Fila con los campos de cuenta, debe, haber, y eliminar */}
         {filas.map((fila, index) => (
           <Grid container spacing={2} key={index} sx={{ marginBottom: 2 }}>
-            <Grid item xs={2}>
-              <TextField
-                label="Código"
-                name="codigo"
-                value={fila.codigo}
-                onChange={(event) => handleFilaChange(index, event)}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Cuenta"
-                name="cuenta"
-                value={fila.cuenta}
-                onChange={(event) => handleFilaChange(index, event)}
-                fullWidth
-                required
-              />
+            <Grid item xs={5}>
+              <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                <InputLabel>Cuenta</InputLabel>
+                <Select
+                  name="cuenta"
+                  onChange={(event) => handleFilaChange(index, event)} // Actualiza el valor seleccionado
+                  required
+                >
+                  {/* Muestra "Seleccione una cuenta" si cuentasHojas está vacío */}
+                  {cuentasHojas.length === 0 ? (
+                    <MenuItem disabled value="">
+                      Seleccione una cuenta
+                    </MenuItem>
+                  ) : (
+                    cuentasHojas.map((cuenta) => (
+                      <MenuItem key={cuenta.codigo} value={cuenta.codigo}>
+                        {cuenta.codigo} - {cuenta.nombre}
+                      </MenuItem>
+                    ))
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={3}>
               <TextField

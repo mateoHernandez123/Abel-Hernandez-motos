@@ -74,10 +74,7 @@ CREATE TABLE asientos (
   CONSTRAINT uq_fecha_hora UNIQUE (fecha, hora)
 );
 
-
-
 -- Tabla cuenta_asiento: 
-
 CREATE TABLE cuenta_asiento (
   asiento_id int NOT NULL,
   cuenta_id int NOT NULL,
@@ -169,6 +166,7 @@ values
     0
 );
 
+SELECT * FROM cuentas
 
 insert into cuentas(nombre, tipo, recibe_saldo, codigo, descripcion, activa)
 values
