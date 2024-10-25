@@ -61,6 +61,34 @@ CREATE TABLE cuentas (
 Alter table cuentas add column monto_actual double(10,2) not null default 0;
 SELECT * FROM cuentas;
 
+
+-- Tabla Asiento: 
+
+CREATE TABLE asientos (
+  idasiento INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  fecha DATE NOT NULL,
+  hora TIME NOT NULL,
+  descripcion VARCHAR(50),
+  usuario_id INT NOT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios (idusuarios),
+  CONSTRAINT uq_fecha_hora UNIQUE (fecha, hora)
+);
+
+
+
+-- Tabla cuenta_asiento: 
+
+CREATE TABLE cuenta_asiento (
+  asiento_id int NOT NULL,
+  cuenta_id int NOT NULL,
+  saldo int NOT NULL default 0,
+  debe int NOT NULL,
+  haber int NOT NULL,
+  FOREIGN KEY (asiento_id) REFERENCES asientos (idasiento),
+  FOREIGN KEY (cuenta_id) REFERENCES cuentas (idcuentas)
+);
+
+
 INSERT INTO roles(tipo)
 VALUES ("admin");
 

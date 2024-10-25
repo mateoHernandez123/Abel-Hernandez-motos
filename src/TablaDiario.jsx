@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -22,7 +22,7 @@ const TablaDiario = ({ datosLibro }) => {
   const formattedPastDate = pastDate.toISOString().split("T")[0];
   const [fechaDesde, setFechaDesde] = useState(formattedPastDate);
   const [fechaHasta, setFechaHasta] = useState(formattedDate);
-  const [filtradoDatos, setFiltradoDatos] = useState(datosLibro);
+  const [filtradoDatos, setFiltradoDatos] = useState([]);
 
   const handleFechaDesdeChange = (e) => {
     setFechaDesde(e.target.value);
@@ -31,6 +31,11 @@ const TablaDiario = ({ datosLibro }) => {
   const handleFechaHastaChange = (e) => {
     setFechaHasta(e.target.value);
   };
+
+  // Ejecutar el filtro automáticamente al cargar la página
+  useEffect(() => {
+    handleFiltrar();
+  }, [datosLibro, fechaDesde, fechaHasta]); // Ejecuta cuando cambien las fechas o datosLibro
 
   const handleFiltrar = () => {
     const datosFiltrados = datosLibro.filter((fila) => {
