@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { Context } from "./context/Context";
 import Swal from "sweetalert2";
@@ -77,7 +78,7 @@ const FormularioCuenta = () => {
       // Verificar el valor del nombre que estamos enviando
       console.log("Enviando Nombre:", nombreCuenta);
 
-      const response = await fetch(`${IP}/api/cuentas/obtenerhijos`, {
+      const response = await fetch(`${IP}/api/cuentas/obtenertodoshijos`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -117,6 +118,10 @@ const FormularioCuenta = () => {
 
   const handleAgregarCuenta = () => {
     navigate("/alta-cuentas");
+  };
+
+  const handleEditClick = (cuenta) => {
+    navigate("/editar-cuenta", { state: { cuenta } });
   };
 
   return (
@@ -176,7 +181,7 @@ const FormularioCuenta = () => {
       {loading ? (
         <Typography>Cargando cuentas...</Typography>
       ) : (
-        <List>
+        <List>        
           {cuentas.length > 0 ? (
             cuentas.map((cuenta) => (
               <ListItem
@@ -187,7 +192,12 @@ const FormularioCuenta = () => {
                   primary={`${cuenta.codigo} - ${cuenta.nombre}`}
                   secondary={cuenta.descripcion}
                 />
-                <Checkbox checked={cuenta.habilitada} />
+                <IconButton
+                  onClick={() => handleEditClick(cuenta)}
+                  color="primary"
+                >
+                  <EditIcon />
+                </IconButton>
               </ListItem>
             ))
           ) : (
