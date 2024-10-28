@@ -1,6 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { TextField, Button, Typography, Box, IconButton, Switch, FormControlLabel } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  IconButton,
+  Switch,
+  FormControlLabel,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
@@ -9,7 +17,7 @@ const EditarCuenta = () => {
   const { state } = useLocation();
   const { cuenta } = state || {}; // Datos de la cuenta seleccionada
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     nombre: cuenta?.nombre || "",
     descripcion: cuenta?.descripcion || "",
@@ -27,7 +35,14 @@ const EditarCuenta = () => {
 
   const handleSaveChanges = async () => {
     // Lógica para guardar los cambios realizados
-    Swal.fire("Cuenta actualizada", "La cuenta fue editada con éxito.", "success");
+    Swal.fire({
+      title: "Cuenta actualizada",
+      text: "La cuenta fue editada con éxito.",
+      icon: "success",
+      color: "#fff",
+      background: "#333",
+      confirmButtonColor: "#3085d6",
+    });
   };
 
   const handleDeleteAccount = () => {
@@ -38,8 +53,10 @@ const EditarCuenta = () => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
+      background: "#333",
       confirmButtonText: "Sí, borrar",
-      cancelButtonText: "Cancelar"
+      cancelButtonText: "Cancelar",
+      color: "#fff",
     }).then((result) => {
       if (result.isConfirmed) {
         // Lógica para eliminar la cuenta
@@ -70,7 +87,7 @@ const EditarCuenta = () => {
           backgroundColor: "#ffeb3b",
           "&:hover": { backgroundColor: "#fdd835" },
           color: "#333",
-          mb: 2
+          mb: 2,
         }}
       >
         <ArrowBackIcon />
@@ -99,7 +116,14 @@ const EditarCuenta = () => {
         sx={{ marginBottom: 2 }}
       />
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+      >
         <FormControlLabel
           control={
             <Switch

@@ -16,11 +16,13 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Context } from "./context/Context";
 import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
 const FormularioAsiento = () => {
   const [filas, setFilas] = useState([
-    { cuenta: "", debe: "", haber: "" }, // Una fila inicial
+    { cuenta: "", debe: "", haber: "" }, // Dos filas iniciales
+    { cuenta: "", debe: "", haber: "" },
   ]);
 
   // Establecer la fecha actual en el estado
@@ -110,8 +112,14 @@ const FormularioAsiento = () => {
 
   // Eliminar una fila
   const eliminarFila = (index) => {
-    const nuevasFilas = filas.filter((_, i) => i !== index);
-    setFilas(nuevasFilas);
+    if (filas.length > 2) {
+      const nuevasFilas = filas.filter((_, i) => i !== index);
+      setFilas(nuevasFilas);
+    } else {
+      setError(
+        `No se puede eliminar más filas, ya que el minimo de filas es 2.`
+      );
+    }
   };
 
   // Calcular la sumatoria de las columnas "Debe" y "Haber"
@@ -142,6 +150,10 @@ const FormularioAsiento = () => {
       return;
     }
 
+    if ((totalDebe == 0) & (totalHaber == 0)) {
+      setError(`No se puede registrar un asiento con valores nulos.`);
+      return;
+    }
     // Validar que el 'haber' no exceda el 'monto_actual' de la cuenta
     for (const fila of filas) {
       const cuenta = cuentasHojas.find((c) => c.codigo === fila.cuenta);
@@ -166,7 +178,14 @@ const FormularioAsiento = () => {
         Haber: parseFloat(fila.haber),
       })),
     };
-    Swal.fire("Éxito", "Asiento creado exitosamente", "success");
+    Swal.fire({
+      title: "Éxito",
+      text: "Asiento creado exitosamente",
+      icon: "success",
+      color: "#fff",
+      background: "#333",
+      confirmButtonColor: "#3085d6",
+    });
     // Aquí podrías descomentar la lógica de envío al servidor
     /*
   try {
@@ -194,6 +213,13 @@ const FormularioAsiento = () => {
     );
   }
   */
+
+    //Setea los campos:
+    setFilas([
+      { cuenta: "", debe: "", haber: "" }, // resetea en dos filas
+      { cuenta: "", debe: "", haber: "" },
+    ]);
+    setDescripcion("");
   };
 
   const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context);
@@ -313,7 +339,6 @@ const FormularioAsiento = () => {
           }}
           required
         />
-
         {/* Campo de descripcion */}
         <TextField
           label="Descripcion"
@@ -327,7 +352,6 @@ const FormularioAsiento = () => {
             shrink: true,
           }}
         />
-
         {/* Fila con los campos de cuenta, debe, haber, y eliminar */}
         {filas.map((fila, index) => (
           <Grid container spacing={2} key={index} sx={{ marginBottom: 2 }}>
@@ -335,8 +359,10 @@ const FormularioAsiento = () => {
               <FormControl fullWidth sx={{ marginBottom: 2 }}>
                 <InputLabel>Cuenta</InputLabel>
                 <Select
+                  label="Cuenta"
+                  value={fila.cuenta} // Aquí mostramos el valor actual de cuenta en la fila
                   name="cuenta"
-                  onChange={(event) => handleFilaChange(index, event)} // Actualiza el valor seleccionado
+                  onChange={(event) => handleFilaChange(index, event)}
                   required
                 >
                   {/* Muestra "Seleccione una cuenta" si cuentasHojas está vacío */}
@@ -345,11 +371,18 @@ const FormularioAsiento = () => {
                       Seleccione una cuenta
                     </MenuItem>
                   ) : (
-                    cuentasHojas.map((cuenta) => (
-                      <MenuItem key={cuenta.codigo} value={cuenta.codigo}>
-                        {cuenta.codigo} - {cuenta.nombre}
-                      </MenuItem>
-                    ))
+                    cuentasHojas
+                      .filter(
+                        (cuenta) =>
+                          !filas.some(
+                            (f, i) => f.cuenta === cuenta.codigo && i !== index
+                          )
+                      )
+                      .map((cuenta) => (
+                        <MenuItem key={cuenta.codigo} value={cuenta.codigo}>
+                          {cuenta.codigo} - {cuenta.nombre}
+                        </MenuItem>
+                      ))
                   )}
                 </Select>
               </FormControl>
@@ -397,14 +430,25 @@ const FormularioAsiento = () => {
             </Grid>
           </Grid>
         ))}
-
-        {/* Mostrar el mensaje de error si la sumatoria no es igual */}
+        {/* Mostrar el mensaje de error*/}
         {error && (
-          <Alert severity="error" sx={{ marginBottom: 2 }}>
+          <Alert
+            severity="error"
+            sx={{ marginBottom: 2 }}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setError("")} // Aquí eliminamos el mensaje de error
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
             {error}
           </Alert>
         )}
-
         {/* Botón para agregar una fila nueva */}
         <Button
           variant="outlined"
@@ -415,7 +459,6 @@ const FormularioAsiento = () => {
         >
           Agregar Fila
         </Button>
-
         {/* Botón para crear asiento */}
         <Button
           variant="contained"
