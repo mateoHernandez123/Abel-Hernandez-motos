@@ -145,9 +145,9 @@ const TablaDiario = ({ datosLibro }) => {
         >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 N°
-              </TableCell>
+              </TableCell> */}
               <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 Fecha
               </TableCell>
@@ -166,23 +166,23 @@ const TablaDiario = ({ datosLibro }) => {
               >
                 Haber
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 Tipo
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
             {grupos.map((grupo, grupoIndex) => {
               return grupo.operaciones.map((fila, index) => (
                 <TableRow key={`${grupoIndex}-${index}`}>
-                  {index === 0 && (
+                  {/* {index === 0 && (
                     <TableCell
                       rowSpan={grupo.operaciones.length}
                       sx={{ fontSize: "1.1rem" }}
                     >
                       {grupo.numero}
                     </TableCell>
-                  )}
+                  )} */}
                   {index === 0 && (
                     <TableCell
                       rowSpan={grupo.operaciones.length}
@@ -205,21 +205,21 @@ const TablaDiario = ({ datosLibro }) => {
                   <TableCell align="right" sx={{ fontSize: "1.1rem" }}>
                     {fila.haber !== 0 ? fila.haber.toFixed(2) : ""}
                   </TableCell>
-                  {index === 0 && (
+                  {/* {index === 0 && (
                     <TableCell
                       rowSpan={grupo.operaciones.length}
                       sx={{ fontSize: "1.1rem" }}
                     >
                       {grupo.tipo}
                     </TableCell>
-                  )}
+                  )} */}
                 </TableRow>
               ));
             })}
             {/* Fila Total */}
             <TableRow>
               <TableCell
-                colSpan={3}
+                colSpan={2}
                 align="right"
                 sx={{ fontWeight: "bold", fontSize: "1.2rem" }}
               >
