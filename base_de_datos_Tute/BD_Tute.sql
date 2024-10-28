@@ -166,7 +166,6 @@ values
     0
 );
 
-SELECT * FROM cuentas
 
 insert into cuentas(nombre, tipo, recibe_saldo, codigo, descripcion, activa)
 values

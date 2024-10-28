@@ -166,7 +166,7 @@ const FormularioAsiento = () => {
         Haber: parseFloat(fila.haber),
       })),
     };
-
+    Swal.fire("Éxito", "Asiento creado exitosamente", "success");
     // Aquí podrías descomentar la lógica de envío al servidor
     /*
   try {

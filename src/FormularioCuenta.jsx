@@ -77,7 +77,7 @@ const FormularioCuenta = () => {
       // Verificar el valor del nombre que estamos enviando
       console.log("Enviando Nombre:", nombreCuenta);
 
-      const response = await fetch(`${IP}/api/cuentas/obtenerhijos`, {
+      const response = await fetch(`${IP}/api/cuentas/obtenertodoshijos`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
