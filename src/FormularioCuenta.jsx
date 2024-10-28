@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { Context } from "./context/Context";
 import Swal from "sweetalert2";
@@ -119,6 +120,10 @@ const FormularioCuenta = () => {
     navigate("/alta-cuentas");
   };
 
+  const handleEditClick = (cuenta) => {
+    navigate("/editar-cuenta", { state: { cuenta } });
+  };
+
   return (
     <Box
       sx={{
@@ -176,7 +181,7 @@ const FormularioCuenta = () => {
       {loading ? (
         <Typography>Cargando cuentas...</Typography>
       ) : (
-        <List>
+        <List>        
           {cuentas.length > 0 ? (
             cuentas.map((cuenta) => (
               <ListItem
@@ -187,7 +192,12 @@ const FormularioCuenta = () => {
                   primary={`${cuenta.codigo} - ${cuenta.nombre}`}
                   secondary={cuenta.descripcion}
                 />
-                <Checkbox checked={cuenta.habilitada} />
+                <IconButton
+                  onClick={() => handleEditClick(cuenta)}
+                  color="primary"
+                >
+                  <EditIcon />
+                </IconButton>
               </ListItem>
             ))
           ) : (

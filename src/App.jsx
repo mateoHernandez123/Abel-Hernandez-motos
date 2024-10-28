@@ -10,6 +10,7 @@ import ListaUsuarios from "./ListaUsuarios";
 import Home from "./Home";
 import LoginPage from "./LoginPage";
 import ListaLibroDiario from "./ListaLibroDiario";
+import EditarCuenta from "./EditarCuenta";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path="/resultados" element={<ListaResultados />} />
                   <Route path="/usuarios" element={<ListaUsuarios />} />
                   <Route path="/" element={<Home />} />
+                  <Route path="/editar-cuenta" element={<EditarCuenta />} /> 
                 </Routes>
               </AppLayout>
             }
