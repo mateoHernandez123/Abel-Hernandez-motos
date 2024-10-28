@@ -37,7 +37,14 @@ const ListaResultados = () => {
   ];
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box
+      sx={{
+        padding: 4,
+        backgroundColor: "#e6e2d5",
+        borderRadius: 5,
+        margin: "1.2rem",
+      }}
+    >
       <Typography variant="h4" sx={{ fontSize: "2rem", textAlign: "center" }}>
         Lista de Resultados
       </Typography>
@@ -62,13 +69,24 @@ const ListaResultados = () => {
         Estado de Resultados
       </Typography>
       <TableContainer component={Paper} sx={{ backgroundColor: "#ffeb3b" }}>
-        <Table>
+        <Table sx={{ width: "750px" }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.4rem",
+                }}
+              >
                 Descripción
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.4rem",
+                  textAlign: "center",
+                }}
+              >
                 Cantidad
               </TableCell>
             </TableRow>

@@ -79,8 +79,8 @@ const TablaDiario = ({ datosLibro }) => {
   const totalHaber = filtradoDatos.reduce((acc, fila) => acc + fila.haber, 0);
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h4" sx={{ marginBottom: 3 }}>
+    <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
+      <Typography variant="h4" sx={{ marginBottom: 3, color: "#0f0f0f" }}>
         Lista de Libro Diario
       </Typography>
 
@@ -94,7 +94,12 @@ const TablaDiario = ({ datosLibro }) => {
           InputLabelProps={{
             shrink: true,
           }}
-          sx={{ marginRight: 2 }}
+          sx={{
+            marginRight: 2,
+            backgroundColor: "#ffeb3b",
+            borderRadius: 2,
+            color: "#333",
+          }}
         />
 
         <TextField
@@ -105,7 +110,12 @@ const TablaDiario = ({ datosLibro }) => {
           InputLabelProps={{
             shrink: true,
           }}
-          sx={{ marginRight: 2 }}
+          sx={{
+            marginRight: 2,
+            backgroundColor: "#ffeb3b",
+            borderRadius: 2,
+            color: "#333",
+          }}
         />
 
         <Button
@@ -137,10 +147,14 @@ const TablaDiario = ({ datosLibro }) => {
       {/* Tabla de Datos */}
       <TableContainer
         component={Paper}
-        sx={{ backgroundColor: "#ffeb3b", marginBottom: 4 }}
+        sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
       >
         <Table
-          sx={{ minWidth: 700, fontSize: "1.4rem" }}
+          sx={{
+            minWidth: 700,
+            fontSize: "1.5rem",
+            width: "800px",
+          }}
           aria-label="tabla libro diario"
         >
           <TableHead>
@@ -148,21 +162,21 @@ const TablaDiario = ({ datosLibro }) => {
               {/* <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
                 N°
               </TableCell> */}
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell sx={{ fontWeight: "bold", fontSize: "1.4rem" }}>
                 Fecha
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell sx={{ fontWeight: "bold", fontSize: "1.4rem" }}>
                 Operación
               </TableCell>
               <TableCell
                 align="right"
-                sx={{ fontWeight: "bold", fontSize: "1.2rem" }}
+                sx={{ fontWeight: "bold", fontSize: "1.4rem" }}
               >
                 Debe
               </TableCell>
               <TableCell
                 align="right"
-                sx={{ fontWeight: "bold", fontSize: "1.2rem" }}
+                sx={{ fontWeight: "bold", fontSize: "1.4rem" }}
               >
                 Haber
               </TableCell>

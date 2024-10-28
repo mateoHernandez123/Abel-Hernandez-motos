@@ -288,15 +288,15 @@ const FormularioAsiento = () => {
     <Box
       sx={{
         backgroundColor: "#ffeb3b",
-        color: "black",
+        color: "#3b3a31",
         padding: 4,
-        borderRadius: 2,
-        width: "100%",
-        maxWidth: "none",
+        borderRadius: 5,
+        width: "900px", // Ancho fijo
+        maxWidth: "100%", // Ajusta en móviles si es necesario
         margin: "auto",
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography variant="h4" sx={{ marginBottom: 2, textAlign: "center" }}>
         Alta de Asiento Contable
       </Typography>
 

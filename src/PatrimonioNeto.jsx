@@ -14,12 +14,11 @@ const PatrimonioNeto = ({ datos, titulo }) => {
   return (
     <>
       <Typography
-        variant="h5"
+        variant="h4"
         sx={{
           fontWeight: "bold",
           fontSize: "1.5rem",
           marginTop: 3,
-          textAlign: "center",
         }}
       >
         {titulo}

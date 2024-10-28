@@ -19,14 +19,26 @@ const ListaUsuarios = () => {
   ];
 
   return (
-    <Box sx={{ padding: 4 }}>
+    <Box
+      sx={{
+        padding: 4,
+        backgroundColor: "#e6e2d5",
+        borderRadius: 5,
+        margin: "1.2rem",
+      }}
+    >
       <Typography variant="h4" sx={{ fontSize: "2rem" }}>
         Lista de Usuarios
       </Typography>
 
       <TableContainer
         component={Paper}
-        sx={{ backgroundColor: "#ffeb3b", marginTop: 3 }}
+        sx={{
+          backgroundColor: "#ffeb3b",
+          marginTop: 3,
+          width: "800px",
+          borderRadius: 5,
+        }}
       >
         <Table>
           <TableHead>

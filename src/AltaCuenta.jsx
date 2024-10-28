@@ -201,8 +201,9 @@ const FormularioCuenta = () => {
         backgroundColor: "#ffeb3b",
         color: "black",
         padding: 4,
-        borderRadius: 2,
-        maxWidth: "600px",
+        borderRadius: 5,
+        width: "900px",
+        maxWidth: "100%",
         margin: "auto",
       }}
     >
@@ -216,7 +217,10 @@ const FormularioCuenta = () => {
       >
         <ArrowBackIcon />
       </IconButton>
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: 2, color: "#333", textAlign: "center" }}
+      >
         Alta de Cuenta Contable
       </Typography>
 
@@ -297,7 +301,13 @@ const FormularioCuenta = () => {
             />
           }
           label="Recibe Saldo"
-          sx={{ marginBottom: 2 }}
+          sx={{
+            marginBottom: 2,
+            display: "flex",
+            flexDirection: "row-reverse", // Coloca el texto a la derecha
+            alignItems: "center",
+            color: "#333",
+          }}
         />
 
         <Button

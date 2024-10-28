@@ -127,17 +127,20 @@ const FormularioCuenta = () => {
   return (
     <Box
       sx={{
-        p: 3,
-        backgroundColor: "#f5f5f5",
-        borderRadius: "8px",
-        maxWidth: "500px",
+        p: 5,
+        padding: 4,
+        backgroundColor: "#ffeb3b",
+        color: "#3b3a31",
+        borderRadius: 5,
+        width: "900px",
+        maxWidth: "100%",
         margin: "auto",
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
       }}
     >
       {/* Título y botón "+" */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography variant="h5" sx={{ color: "#333" }}>
+        <Typography variant="h4" sx={{ color: "#333" }}>
           Gestión de Cuentas
         </Typography>
         <IconButton
@@ -161,7 +164,7 @@ const FormularioCuenta = () => {
             fullWidth
             sx={{
               backgroundColor: "#333",
-              color: "#ffeb3b",
+              color: "#ffff",
               mb: 2,
               "&:hover": { backgroundColor: "#555" },
             }}
@@ -175,13 +178,13 @@ const FormularioCuenta = () => {
       )}
 
       {/* Mostrar el listado de cuentas hijas */}
-      <Typography variant="h6" sx={{ mt: 4 }}>
+      <Typography variant="h5" sx={{ mt: 4 }}>
         Listado de Cuentas
       </Typography>
       {loading ? (
         <Typography>Cargando cuentas...</Typography>
       ) : (
-        <List>        
+        <List>
           {cuentas.length > 0 ? (
             cuentas.map((cuenta) => (
               <ListItem
