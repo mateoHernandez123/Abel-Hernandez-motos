@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 
 const ListaUsuarios = () => {
-  // Datos de Usuarios
+  // Datos de Usuarios PARA LA PROXIMA... CONTINUARA
   const usuarios = [
     { email: "mateo@hernandez", nombre: "Mateo Hernandez", rol: "admin" },
-    { email: "ana@lopez", nombre: "Ana Lopez", rol: "usuario" },
-    { email: "juan@perez", nombre: "Juan Perez", rol: "usuario" },
+    { email: "ana@lopez", nombre: "Ana Lopez", rol: "basico" },
+    { email: "juan@perez", nombre: "Juan Perez", rol: "basico" },
   ];
 
   return (
@@ -27,7 +27,14 @@ const ListaUsuarios = () => {
         margin: "1.2rem",
       }}
     >
-      <Typography variant="h4" sx={{ fontSize: "2rem" }}>
+      <Typography
+        variant="h4"
+        sx={{
+          marginBottom: 3,
+          color: "#0f0f0f",
+          textAling: "center",
+        }}
+      >
         Lista de Usuarios
       </Typography>
 

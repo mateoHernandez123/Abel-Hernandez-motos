@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Box,
   Typography,
@@ -12,71 +12,92 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import Swal from "sweetalert2";
+import { Context } from "./context/Context";
 
-const TablaDiario = ({ datosLibro }) => {
+const TablaDiario = () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
-  // Calcular fecha 30 días atrás
   const pastDate = new Date(today);
-  pastDate.setDate(today.getDate() - 30); // Restar 30 días
+  pastDate.setDate(today.getDate() - 30);
   const formattedPastDate = pastDate.toISOString().split("T")[0];
   const [fechaDesde, setFechaDesde] = useState(formattedPastDate);
   const [fechaHasta, setFechaHasta] = useState(formattedDate);
   const [filtradoDatos, setFiltradoDatos] = useState([]);
+  const [datosLibros, setDatosLibros] = useState([]);
+  const [paginas, setPaginas] = useState(0);
+  const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context);
 
-  const handleFechaDesdeChange = (e) => {
-    setFechaDesde(e.target.value);
-  };
+  const handleFechaDesdeChange = (e) => setFechaDesde(e.target.value);
+  const handleFechaHastaChange = (e) => setFechaHasta(e.target.value);
 
-  const handleFechaHastaChange = (e) => {
-    setFechaHasta(e.target.value);
-  };
-
-  // Ejecutar el filtro automáticamente al cargar la página
   useEffect(() => {
     handleFiltrar();
-  }, [datosLibro, fechaDesde, fechaHasta]); // Ejecuta cuando cambien las fechas o datosLibro
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    fetch(`${IP}/api/librodiario`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        FecDesde: fechaDesde,
+        FecHasta: fechaHasta,
+        Pagina: 1,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.AuthErr) tokenError(result.MENSAJE);
+        else if (result.ServErr || result.ERROR) {
+          Swal.fire({
+            title: result.ERROR ? "Atención" : "Error",
+            icon: result.ERROR ? "warning" : "error",
+            text: result.MENSAJE,
+          });
+        } else {
+          setDatosLibros(result.Libro);
+          setPaginas(result.TotalPaginas);
+        }
+      })
+      .catch(() =>
+        Swal.fire(
+          "Error",
+          "No se pudo enviar la información al servidor",
+          "error"
+        )
+      );
+  }, [fechaDesde, fechaHasta]);
 
   const handleFiltrar = () => {
-    const datosFiltrados = datosLibro.filter((fila) => {
+    const datosFiltrados = datosLibros.filter((fila) => {
       const fechaFila = new Date(fila.fecha.split("/").reverse().join("-"));
       const desde = fechaDesde ? new Date(fechaDesde) : null;
       const hasta = fechaHasta ? new Date(fechaHasta) : null;
-
       return (!desde || fechaFila >= desde) && (!hasta || fechaFila <= hasta);
     });
     setFiltradoDatos(datosFiltrados);
   };
 
-  // Función para limpiar las fechas
   const handleLimpiarFechas = () => {
     setFechaDesde(formattedPastDate);
-    setFechaHasta(formattedDate); // Resetea fechaHasta al valor actual
-    handleFiltrar(); // Restablece los datos
+    setFechaHasta(formattedDate);
+    handleFiltrar();
   };
 
-  // Agrupar operaciones por número, fecha y tipo
-  const operacionesAgrupadas = {};
+  const totalDebe = filtradoDatos.reduce(
+    (acc, libro) =>
+      acc + libro.filas.reduce((accFila, fila) => accFila + fila.debe, 0),
+    0
+  );
 
-  filtradoDatos.forEach((fila) => {
-    const clave = `${fila.numero}-${fila.fecha}-${fila.tipo}`;
-    if (!operacionesAgrupadas[clave]) {
-      operacionesAgrupadas[clave] = {
-        numero: fila.numero,
-        fecha: fila.fecha,
-        tipo: fila.tipo,
-        operaciones: [],
-      };
-    }
-    operacionesAgrupadas[clave].operaciones.push(fila);
-  });
-
-  // Convertir el objeto a un array para su uso en el render
-  const grupos = Object.values(operacionesAgrupadas);
-
-  // Calcular la sumatoria de Debe y Haber
-  const totalDebe = filtradoDatos.reduce((acc, fila) => acc + fila.debe, 0);
-  const totalHaber = filtradoDatos.reduce((acc, fila) => acc + fila.haber, 0);
+  const totalHaber = filtradoDatos.reduce(
+    (acc, libro) =>
+      acc + libro.filas.reduce((accFila, fila) => accFila + fila.haber, 0),
+    0
+  );
 
   return (
     <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
@@ -84,22 +105,14 @@ const TablaDiario = ({ datosLibro }) => {
         Lista de Libro Diario
       </Typography>
 
-      {/* Inputs para Fecha Desde y Fecha Hasta */}
       <Box display="flex" justifyContent="space-between" mb={2}>
         <TextField
           label="Fecha Desde"
           type="date"
           value={fechaDesde}
           onChange={handleFechaDesdeChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{
-            marginRight: 2,
-            backgroundColor: "#ffeb3b",
-            borderRadius: 2,
-            color: "#333",
-          }}
+          InputLabelProps={{ shrink: true }}
+          sx={{ marginRight: 2, backgroundColor: "#ffeb3b", borderRadius: 2 }}
         />
 
         <TextField
@@ -107,15 +120,8 @@ const TablaDiario = ({ datosLibro }) => {
           type="date"
           value={fechaHasta}
           onChange={handleFechaHastaChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{
-            marginRight: 2,
-            backgroundColor: "#ffeb3b",
-            borderRadius: 2,
-            color: "#333",
-          }}
+          InputLabelProps={{ shrink: true }}
+          sx={{ marginRight: 2, backgroundColor: "#ffeb3b", borderRadius: 2 }}
         />
 
         <Button
@@ -130,7 +136,6 @@ const TablaDiario = ({ datosLibro }) => {
           Filtrar
         </Button>
 
-        {/* Botón para limpiar las fechas */}
         <Button
           variant="outlined"
           onClick={handleLimpiarFechas}
@@ -144,7 +149,6 @@ const TablaDiario = ({ datosLibro }) => {
         </Button>
       </Box>
 
-      {/* Tabla de Datos */}
       <TableContainer
         component={Paper}
         sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
@@ -154,16 +158,20 @@ const TablaDiario = ({ datosLibro }) => {
             minWidth: 700,
             fontSize: "1.5rem",
             width: "800px",
+            "& .MuiTableCell-root": {
+              borderColor: "black", // Aplica color negro a las líneas de celda
+              borderWidth: "1px", // Ajusta el grosor de las líneas
+            },
           }}
           aria-label="tabla libro diario"
         >
           <TableHead>
             <TableRow>
-              {/* <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                N°
-              </TableCell> */}
               <TableCell sx={{ fontWeight: "bold", fontSize: "1.4rem" }}>
                 Fecha
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: "1.4rem" }}>
+                Hora
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", fontSize: "1.4rem" }}>
                 Operación
@@ -180,38 +188,42 @@ const TablaDiario = ({ datosLibro }) => {
               >
                 Haber
               </TableCell>
-              {/* <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                Tipo
-              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {grupos.map((grupo, grupoIndex) => {
-              return grupo.operaciones.map((fila, index) => (
-                <TableRow key={`${grupoIndex}-${index}`}>
-                  {/* {index === 0 && (
-                    <TableCell
-                      rowSpan={grupo.operaciones.length}
-                      sx={{ fontSize: "1.1rem" }}
-                    >
-                      {grupo.numero}
-                    </TableCell>
-                  )} */}
+            {filtradoDatos.map((libro, libroIndex) => {
+              return libro.filas.map((fila, index) => (
+                <TableRow key={`${libroIndex}-${index}`}>
                   {index === 0 && (
                     <TableCell
-                      rowSpan={grupo.operaciones.length}
+                      rowSpan={libro.filas.length}
                       sx={{ fontSize: "1.1rem" }}
                     >
-                      {grupo.fecha}
+                      {new Date(libro.fecha).toLocaleDateString("es-AR")}
                     </TableCell>
                   )}
+                  {index === 0 && (
+                    <TableCell
+                      rowSpan={libro.filas.length}
+                      sx={{ fontSize: "1.1rem" }}
+                    >
+                      {new Date(`1970-01-01T${libro.hora}`).toLocaleTimeString(
+                        "es-AR",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </TableCell>
+                  )}
+
                   <TableCell
                     sx={{
                       fontSize: "1.1rem",
                       paddingLeft: fila.haber ? "30px" : "0px",
                     }}
                   >
-                    {fila.operacion}
+                    {fila.nombre}
                   </TableCell>
                   <TableCell align="right" sx={{ fontSize: "1.1rem" }}>
                     {fila.debe !== 0 ? fila.debe.toFixed(2) : ""}
@@ -219,21 +231,12 @@ const TablaDiario = ({ datosLibro }) => {
                   <TableCell align="right" sx={{ fontSize: "1.1rem" }}>
                     {fila.haber !== 0 ? fila.haber.toFixed(2) : ""}
                   </TableCell>
-                  {/* {index === 0 && (
-                    <TableCell
-                      rowSpan={grupo.operaciones.length}
-                      sx={{ fontSize: "1.1rem" }}
-                    >
-                      {grupo.tipo}
-                    </TableCell>
-                  )} */}
                 </TableRow>
               ));
             })}
-            {/* Fila Total */}
             <TableRow>
               <TableCell
-                colSpan={2}
+                colSpan={3}
                 align="right"
                 sx={{ fontWeight: "bold", fontSize: "1.2rem" }}
               >
@@ -251,7 +254,6 @@ const TablaDiario = ({ datosLibro }) => {
               >
                 {totalHaber.toFixed(2)}
               </TableCell>
-              <TableCell sx={{ fontSize: "1.1rem" }}></TableCell>
             </TableRow>
           </TableBody>
         </Table>

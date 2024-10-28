@@ -90,17 +90,16 @@ const FormularioCuenta = () => {
 
       try {
         const token = JSON.parse(localStorage.getItem("accessToken"));
-        const response = await fetch(`${IP}/api/cuentas/obtenerhijos`, {
+        const response = await fetch(`${IP}/api/cuentas/obtenertodoshijos`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            nombre: value, // Nombre de la cuenta raíz seleccionada
+            codigo: value, // Codigo de la cuenta raíz seleccionada
           }),
         });
-
         const data = await response.json();
         if (data.AuthErr) {
           tokenError(data.MENSAJE);
@@ -116,11 +115,15 @@ const FormularioCuenta = () => {
           //} else {
           //setMostrarRecibeSaldo(true); // Mostrar checkbox si no hay hijos
 
-          const hijos = data.Hijos || [];
-          // Encontramos el tipo raíz (el valor seleccionado en `tipo`)
-          const tipoRaiz = tipos.find((tipo) => tipo.nombre === value);
+          let hijosFetch = data.Hijos || [];
 
-          // Si el tipo raíz existe, lo añadimos como opción junto con los hijos
+          // Filtramos para incluir solo las cuentas hijas que no reciben saldo
+          const hijos = hijosFetch.filter((hijo) => hijo.recibe_saldo === 0);
+
+          // Buscamos la cuenta raíz seleccionada en `tipo`
+          const tipoRaiz = tipos.find((tipo) => tipo.codigo === value);
+
+          // Si el tipo raíz existe, lo incluimos al principio, seguido de sus hijos que no reciben saldo
           if (tipoRaiz) {
             setGrupos([tipoRaiz, ...hijos]);
           } else {
@@ -146,18 +149,17 @@ const FormularioCuenta = () => {
     // Obtener el padre de la cuenta, que puede ser la cuenta seleccionada en "tipo" o en "grupo"
     const padre =
       grupos.length > 0 && formData.grupo !== ""
-        ? grupos.find((grupo) => grupo.nombre === formData.grupo)?.idcuentas
-        : tipos.find((tipo) => tipo.nombre === formData.tipo)?.idcuentas;
-
+        ? grupos.find((grupo) => grupo.codigo === formData.grupo)?.idcuentas
+        : tipos.find((tipo) => tipo.codigo === formData.grupo)?.idcuentas;
+    console.log(tipos);
+    console.log(formData);
     const Nodo = {
       nombre: formData.nombre,
-      tipo: tipos.find((tipo) => tipo.nombre === formData.tipo)?.tipo, // A, P, PN, R+, R-
+      tipo: tipos.find((tipo) => tipo.codigo === formData.tipo)?.tipo, // A, P, PN, R+, R-
       recibeSaldo: formData.recibeSaldo,
       descripcion: formData.descripcion,
       padre: padre || null, // ID del padre
     };
-
-    console.log(Nodo);
 
     try {
       const token = JSON.parse(localStorage.getItem("accessToken"));
@@ -184,6 +186,10 @@ const FormularioCuenta = () => {
           title: "Cuenta agregada",
           icon: "success",
           text: `Cuenta ${formData.nombre} agregada correctamente`,
+        }).then((result) => {
+          if (result.isConfirmed || result.isDismissed) {
+            window.location.reload();
+          }
         });
       }
     } catch (error) {
@@ -192,6 +198,7 @@ const FormularioCuenta = () => {
         icon: "error",
         text: "Hubo un problema al agregar la cuenta.",
       });
+      console.log(error);
     }
   };
 
@@ -248,7 +255,7 @@ const FormularioCuenta = () => {
               <MenuItem>Cargando tipos...</MenuItem>
             ) : (
               tipos.map((tipo) => (
-                <MenuItem key={tipo.codigo} value={tipo.nombre}>
+                <MenuItem key={tipo.codigo} value={tipo.codigo}>
                   {tipo.nombre}
                 </MenuItem>
               ))
@@ -271,8 +278,8 @@ const FormularioCuenta = () => {
                 <MenuItem>Cargando grupos...</MenuItem>
               ) : (
                 grupos.map((grupo) => (
-                  <MenuItem key={grupo.codigo} value={grupo.nombre}>
-                    {grupo.nombre}
+                  <MenuItem key={grupo.codigo} value={grupo.codigo}>
+                    {grupo.codigo} - {grupo.nombre}
                   </MenuItem>
                 ))
               )}
@@ -304,9 +311,9 @@ const FormularioCuenta = () => {
           sx={{
             marginBottom: 2,
             display: "flex",
-            flexDirection: "row-reverse", // Coloca el texto a la derecha
             alignItems: "center",
             color: "#333",
+            justifyContent: "center",
           }}
         />
 

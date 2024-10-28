@@ -70,13 +70,13 @@ const FormularioCuenta = () => {
   }, [IP, tokenError]);
 
   // Función para listar cuentas hijas según la categoría
-  const handleListarCategoria = async (nombreCuenta) => {
+  const handleListarCategoria = async (codigoCuenta) => {
     setLoading(true);
     try {
       const token = JSON.parse(localStorage.getItem("accessToken"));
 
       // Verificar el valor del nombre que estamos enviando
-      console.log("Enviando Nombre:", nombreCuenta);
+      console.log("Enviando Nombre:", codigoCuenta);
 
       const response = await fetch(`${IP}/api/cuentas/obtenertodoshijos`, {
         method: "POST",
@@ -85,7 +85,7 @@ const FormularioCuenta = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nombre: nombreCuenta, // Enviar el nombre de la cuenta raíz
+          codigo: codigoCuenta, // Enviar el codigo de la cuenta raíz
         }),
       });
 
@@ -168,7 +168,7 @@ const FormularioCuenta = () => {
               mb: 2,
               "&:hover": { backgroundColor: "#555" },
             }}
-            onClick={() => handleListarCategoria(cuentaRaiz.nombre)} // Se envía el nombre de la cuenta raíz
+            onClick={() => handleListarCategoria(cuentaRaiz.codigo)} // Se envía el nombre de la cuenta raíz
           >
             {`Listar ${cuentaRaiz.nombre}`}
           </Button>

@@ -49,18 +49,45 @@ const FormularioAsiento = () => {
     return () => clearInterval(timer); // Limpiar intervalo al desmontar el componente
   }, []);
 
-  // Simular la petición para obtener la fecha del último asiento
   useEffect(() => {
-    const fetchUltimoAsiento = async () => {
-      // Simulación de la fecha y hora del último asiento
-      const ultimoAsiento = "2024-10-10T12:45"; // Ejemplo de respuesta simulada
-      setFechaUltimoAsiento(ultimoAsiento.split("T")[0]); // Fecha en formato YYYY-MM-DD
-      setHoraUltimoAsiento(ultimoAsiento.split("T")[1].slice(0, 5)); // Hora en formato HH:MM
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     };
 
-    fetchUltimoAsiento();
-  }, []);
+    fetch(`${IP}/api/asientos/ultimoasiento`, {
+      method: "GET",
+      headers,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.AuthErr) tokenError(result.MENSAJE);
+        else if (result.ServErr || result.ERROR) {
+          Swal.fire({
+            title: result.ERROR ? "Atención" : "Error",
+            icon: result.ERROR ? "warning" : "error",
+            text: result.MENSAJE,
+          });
+        } else {
+          // Asumiendo que result.Fecha y result.Hora están en formato adecuado
+          const formattedDate = result.Fecha.split("T")[0]; // Si resulta en un ISO string
+          const formattedTime = result.Hora.split(":").slice(0, 2).join(":"); // Obtén HH:MM
 
+          // Configura el estado
+          setFechaUltimoAsiento(formattedDate); // Fecha en formato YYYY-MM-DD
+          setHoraUltimoAsiento(formattedTime); // Hora en formato HH:MM
+          console.log({ Fecha: formattedDate, Hora: formattedTime }); // Muestra el objeto
+        }
+      })
+      .catch(() =>
+        Swal.fire(
+          "Error",
+          "No se pudo enviar la información al servidor",
+          "error"
+        )
+      );
+  }, []);
   // Manejar el cambio en el campo de fecha
   const handleFechaChange = (e) => {
     const selectedDate = e.target.value;
@@ -74,10 +101,30 @@ const FormularioAsiento = () => {
     }
   };
 
-  // Manejar el cambio en el campo de hora
   const handleHoraChange = (e) => {
     const selectedTime = e.target.value;
-    setHora(selectedTime);
+
+    // Convertir la fecha y la hora a un objeto Date para comparar
+    const [horaUltimo, minutosUltimo] = horaUltimoAsiento.split(":");
+    const ultimoAsientoDateTime = new Date(fechaUltimoAsiento);
+    ultimoAsientoDateTime.setHours(horaUltimo, minutosUltimo);
+
+    // Obtener la fecha y hora actuales
+    const hoy = new Date();
+    const selectedDateTime = new Date(ultimoAsientoDateTime); // Crea una nueva instancia basada en el último asiento
+    const [selectedHours, selectedMinutes] = selectedTime.split(":");
+    selectedDateTime.setHours(selectedHours, selectedMinutes);
+
+    // Validar si la hora seleccionada está dentro del rango
+    if (selectedDateTime < ultimoAsientoDateTime || selectedDateTime > hoy) {
+      Swal.fire({
+        title: "Error",
+        text: "La hora seleccionada debe estar entre la fecha del último asiento y la fecha actual.",
+        icon: "error",
+      });
+    } else {
+      setHora(selectedTime); // Si es válida, establece la hora
+    }
   };
 
   // Función para manejar el cambio en el campo descripción
@@ -155,17 +202,17 @@ const FormularioAsiento = () => {
       return;
     }
     // Validar que el 'haber' no exceda el 'monto_actual' de la cuenta
-    for (const fila of filas) {
-      const cuenta = cuentasHojas.find((c) => c.codigo === fila.cuenta);
+    // for (const fila of filas) {
+    //   const cuenta = cuentasHojas.find((c) => c.codigo === fila.cuenta);
 
-      // Solo realizar la validación si la cuenta es encontrada
-      if (cuenta && parseFloat(fila.haber) > cuenta.monto_actual) {
-        setError(
-          `El monto en Haber excede el monto actual (${cuenta.monto_actual}) de la cuenta ${cuenta.nombre}.`
-        );
-        return;
-      }
-    }
+    //   // Solo realizar la validación si la cuenta es encontrada
+    //   if (cuenta && parseFloat(fila.haber) > cuenta.monto_actual) {
+    //     setError(
+    //       `El monto en Haber excede el monto actual (${cuenta.monto_actual}) de la cuenta ${cuenta.nombre}.`
+    //     );
+    //     return;
+    //   }
+    // }
 
     // Preparar el objeto para enviar al backend
     const data = {
@@ -178,41 +225,52 @@ const FormularioAsiento = () => {
         Haber: parseFloat(fila.haber),
       })),
     };
-    Swal.fire({
-      title: "Éxito",
-      text: "Asiento creado exitosamente",
-      icon: "success",
-      color: "#fff",
-      background: "#333",
-      confirmButtonColor: "#3085d6",
-    });
-    // Aquí podrías descomentar la lógica de envío al servidor
-    /*
-  try {
-    const token = JSON.parse(localStorage.getItem("accessToken"));
-    const response = await fetch(`${IP}/api/asientos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
 
-    const result = await response.json();
-    if (result.success) {
-      Swal.fire("Éxito", "Asiento creado exitosamente", "success");
-    } else {
-      Swal.fire("Error", "Error al crear el asiento", "error");
+    // Aquí podrías descomentar la lógica de envío al servidor
+    try {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+      const response = await fetch(`${IP}/api/asientos/registrarasiento`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.AuthErr) {
+        tokenError(result.MENSAJE);
+      } else if (result.ServErr) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: result.MENSAJE,
+        });
+      } else if (result.ERROR) {
+        Swal.fire({
+          icon: "warning",
+          title: "Atención",
+          text: result.MENSAJE,
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Exito",
+          text: result.MENSAJE,
+        }).then((result) => {
+          if (result.isConfirmed || result.isDismissed) {
+            window.location.reload();
+          }
+        });
+      }
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        "No se pudo enviar la información al servidor",
+        "error"
+      );
     }
-  } catch (error) {
-    Swal.fire(
-      "Error",
-      "No se pudo enviar la información al servidor",
-      "error"
-    );
-  }
-  */
 
     //Setea los campos:
     setFilas([

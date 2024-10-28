@@ -61,6 +61,9 @@ CREATE TABLE cuentas (
 Alter table cuentas add column monto_actual double(10,2) not null default 0;
 SELECT * FROM cuentas;
 
+alter table cuentas add constraint UQ_codigo unique (codigo);
+alter table cuentas add CONSTRAINT UQ_nombre_recibe_saldo unique (nombre,recibe_saldo);
+
 
 -- Tabla Asiento: 
 
@@ -189,3 +192,8 @@ from roles as r inner join roles_permisos as rp on rp.rol_id = r.idrol
 where r.idrol= (select u.roles_idrol 
                 from usuarios as u 
                     where mail = 'email');
+
+SELECT * FROM cuentas;
+
+DELETE FROM cuentas
+WHERE idcuentas in (7,6);
