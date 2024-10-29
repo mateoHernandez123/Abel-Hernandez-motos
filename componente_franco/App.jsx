@@ -4,14 +4,13 @@ import AppLayout from "./AppLayout";
 import AltaCuenta from "./AltaCuenta";
 import FormularioCuenta from "./FormularioCuenta";
 import FormularioAsiento from "./FormularioAsiento";
-import ListaMayores from "./ListaMayores";
+import MayorCuenta from "../src/MayorCuenta.jsx";
 import ListaResultados from "./ListaResultados";
 import ListaUsuarios from "./ListaUsuarios";
 import Home from "./Home";
 import LoginPage from "./LoginPage";
 import ListaLibroDiario from "./ListaLibroDiario";
 import EditarCuenta from "./EditarCuenta";
-import MayorCuenta from "./MayorCuenta.jsx";
 
 const App = () => {
   return (
@@ -34,7 +33,7 @@ const App = () => {
                   <Route path="/resultados" element={<ListaResultados />} />
                   <Route path="/usuarios" element={<ListaUsuarios />} />
                   <Route path="/" element={<Home />} />
-                  <Route path="/editar-cuenta" element={<EditarCuenta />} />
+                  <Route path="/editar-cuenta" element={<EditarCuenta />} /> 
                 </Routes>
               </AppLayout>
             }
