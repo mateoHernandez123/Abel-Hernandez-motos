@@ -47,7 +47,17 @@ const ListaUsuarios = () => {
           borderRadius: 5,
         }}
       >
-        <Table>
+        <Table
+          sx={{
+            minWidth: 700,
+            fontSize: "1.5rem",
+            width: "800px",
+            "& .MuiTableCell-root": {
+              borderColor: "black", // Aplica color negro a las líneas de celda
+              borderWidth: "1px", // Ajusta el grosor de las líneas
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
