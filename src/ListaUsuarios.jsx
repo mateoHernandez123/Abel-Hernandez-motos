@@ -14,8 +14,7 @@ const ListaUsuarios = () => {
   // Datos de Usuarios PARA LA PROXIMA... CONTINUARA
   const usuarios = [
     { email: "mateo@hernandez", nombre: "Mateo Hernandez", rol: "admin" },
-    { email: "ana@lopez", nombre: "Ana Lopez", rol: "basico" },
-    { email: "juan@perez", nombre: "Juan Perez", rol: "basico" },
+    { email: "franco@liciaga", nombre: "Franco Liciaga", rol: "basico" },
   ];
 
   return (

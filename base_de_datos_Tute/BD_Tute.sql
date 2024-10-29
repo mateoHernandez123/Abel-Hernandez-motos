@@ -100,8 +100,12 @@ SELECT * FROM roles;
 INSERT INTO usuarios (mail, nombre_usuario, contrasenia, roles_idrol)
 VALUES ('mateo@hernandez', 'mateo', '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705', 1);
 
+INSERT INTO usuarios (mail, nombre_usuario, contrasenia, roles_idrol)
+VALUES ('franco@liciaga', 'Franco Liciaga', '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705', 2);
+
 
 UPDATE usuarios  set contrasenia = '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705' where mail = 'mateo@hernandez'; 
+
 
 insert into permisos(nombre)
 values('Cuentas'), ('Asientos'), ('Diarios'), ('Mayores'), ('Resultados'), ('Usuarios');
