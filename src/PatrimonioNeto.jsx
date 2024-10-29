@@ -16,10 +16,9 @@ const PatrimonioNeto = ({ datos, titulo }) => {
       <Typography
         variant="h5"
         sx={{
-          fontWeight: "bold",
-          marginBottom: 2,
-          color: "#333",
           textAlign: "center",
+          fontWeight: "bold",
+          fontSize: "1.5rem",
         }}
       >
         {titulo}
@@ -28,13 +27,13 @@ const PatrimonioNeto = ({ datos, titulo }) => {
         component={Paper}
         sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
       >
-        <Table>
+        <Table sx={{ width: "750px" }}>
           <TableHead>
             <TableRow>
               <TableCell
                 sx={{
                   fontWeight: "bold",
-                  fontSize: "1.2rem",
+                  fontSize: "1.4rem",
                   textAlign: "center",
                 }}
               >
@@ -43,7 +42,7 @@ const PatrimonioNeto = ({ datos, titulo }) => {
               <TableCell
                 sx={{
                   fontWeight: "bold",
-                  fontSize: "1.2rem",
+                  fontSize: "1.4rem",
                   textAlign: "center",
                 }}
               >
@@ -52,7 +51,7 @@ const PatrimonioNeto = ({ datos, titulo }) => {
               <TableCell
                 sx={{
                   fontWeight: "bold",
-                  fontSize: "1.2rem",
+                  fontSize: "1.4rem",
                   textAlign: "center",
                 }}
               >

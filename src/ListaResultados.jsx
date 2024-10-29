@@ -48,7 +48,7 @@ const ListaResultados = () => {
       <Typography
         variant="h4"
         sx={{
-          marginBottom: 2,
+          marginBottom: 4,
           color: "#333",
           textAlign: "center",
           fontWeight: "bold",
@@ -76,7 +76,10 @@ const ListaResultados = () => {
       >
         Estado de Resultados
       </Typography>
-      <TableContainer component={Paper} sx={{ backgroundColor: "#ffeb3b" }}>
+      <TableContainer
+        component={Paper}
+        sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
+      >
         <Table sx={{ width: "750px" }}>
           <TableHead>
             <TableRow>
