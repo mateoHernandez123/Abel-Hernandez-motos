@@ -238,9 +238,10 @@ const MayorCuenta = () => {
             minWidth: 700,
             fontSize: "1.5rem",
             width: "800px",
-            borderColor: "black", // Borde de la tabla en negro
-            borderWidth: "1px",
-            borderStyle: "solid",
+            "& .MuiTableCell-root": {
+              borderColor: "black", // Aplica color negro a las líneas de celda
+              borderWidth: "1px", // Ajusta el grosor de las líneas
+            },
           }}
           aria-label="tabla mayor cuentas"
         >
