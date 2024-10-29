@@ -32,7 +32,7 @@ const TablaDiario = () => {
   const handleFechaHastaChange = (e) => setFechaHasta(e.target.value);
 
   useEffect(() => {
-    handleFiltrar();
+    //handleFiltrar();
     const token = JSON.parse(localStorage.getItem("accessToken"));
     const headers = {
       "Content-Type": "application/json",
@@ -71,33 +71,37 @@ const TablaDiario = () => {
       );
   }, [fechaDesde, fechaHasta]);
 
-  const handleFiltrar = () => {
-    const datosFiltrados = datosLibros.filter((fila) => {
-      const fechaFila = new Date(fila.fecha.split("/").reverse().join("-"));
-      const desde = fechaDesde ? new Date(fechaDesde) : null;
-      const hasta = fechaHasta ? new Date(fechaHasta) : null;
-      return (!desde || fechaFila >= desde) && (!hasta || fechaFila <= hasta);
-    });
-    setFiltradoDatos(datosFiltrados);
-  };
-
+  // const handleFiltrar = () => {
+  //   const datosFiltrados = datosLibros.filter((fila) => {
+  //     const fechaFila = new Date(fila.fecha.split("/").reverse().join("-"));
+  //     const desde = fechaDesde ? new Date(fechaDesde) : null;
+  //     const hasta = fechaHasta ? new Date(fechaHasta) : null;
+  //     return (!desde || fechaFila >= desde) && (!hasta || fechaFila <= hasta);
+  //   });
+  //   setFiltradoDatos(datosFiltrados);
+  // };
   const handleLimpiarFechas = () => {
     setFechaDesde(formattedPastDate);
     setFechaHasta(formattedDate);
-    handleFiltrar();
+    //handleFiltrar();
   };
 
-  const totalDebe = filtradoDatos.reduce(
+  const totalDebe = datosLibros.reduce(
     (acc, libro) =>
       acc + libro.filas.reduce((accFila, fila) => accFila + fila.debe, 0),
     0
   );
 
-  const totalHaber = filtradoDatos.reduce(
+  const totalHaber = datosLibros.reduce(
     (acc, libro) =>
       acc + libro.filas.reduce((accFila, fila) => accFila + fila.haber, 0),
     0
   );
+
+  const formatearFecha = (fecha) => {
+    const [year, month, day] = fecha.split("-"); // Suponiendo que la fecha está en formato "aaaa-mm-dd"
+    return `${day}/${month}/${year}`; // Devuelve la fecha en formato "dd/mm/aaaa"
+  };
 
   return (
     <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
@@ -113,7 +117,7 @@ const TablaDiario = () => {
         Lista de Libro Diario
       </Typography>
 
-      <Box display="flex" justifyContent="space-between" mb={2}>
+      <Box display="flex" justifyContent="center" mb={2} mt={4}>
         <TextField
           label="Fecha Desde"
           type="date"
@@ -132,9 +136,9 @@ const TablaDiario = () => {
           sx={{ marginRight: 2, backgroundColor: "#ffeb3b", borderRadius: 2 }}
         />
 
-        <Button
+        {/* <Button
           variant="contained"
-          onClick={handleFiltrar}
+          // onClick={handleFiltrar}
           sx={{
             backgroundColor: "#ffeb3b",
             color: "black",
@@ -142,7 +146,7 @@ const TablaDiario = () => {
           }}
         >
           Filtrar
-        </Button>
+        </Button> */}
 
         <Button
           variant="outlined"
@@ -199,7 +203,7 @@ const TablaDiario = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filtradoDatos.map((libro, libroIndex) => {
+            {datosLibros.map((libro, libroIndex) => {
               return libro.filas.map((fila, index) => (
                 <TableRow key={`${libroIndex}-${index}`}>
                   {index === 0 && (
@@ -207,7 +211,7 @@ const TablaDiario = () => {
                       rowSpan={libro.filas.length}
                       sx={{ fontSize: "1.1rem" }}
                     >
-                      {new Date(libro.fecha).toLocaleDateString("es-AR")}
+                      {formatearFecha(libro.fecha)}
                     </TableCell>
                   )}
                   {index === 0 && (

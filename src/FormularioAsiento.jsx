@@ -77,7 +77,6 @@ const FormularioAsiento = () => {
           // Configura el estado
           setFechaUltimoAsiento(formattedDate); // Fecha en formato YYYY-MM-DD
           setHoraUltimoAsiento(formattedTime); // Hora en formato HH:MM
-          console.log({ Fecha: formattedDate, Hora: formattedTime }); // Muestra el objeto
         }
       })
       .catch(() =>

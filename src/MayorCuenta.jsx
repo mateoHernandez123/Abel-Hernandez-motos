@@ -137,8 +137,13 @@ const MayorCuenta = () => {
     return cuentaSeleccionada ? cuentaSeleccionada.nombre : "";
   };
 
+  const formatearFecha = (fecha) => {
+    const [year, month, day] = fecha.split("-"); // Suponiendo que la fecha está en formato "aaaa-mm-dd"
+    return `${day}/${month}/${year}`; // Devuelve la fecha en formato "dd/mm/aaaa"
+  };
+
   return (
-    <div>
+    <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
       <Typography
         variant="h4"
         sx={{
@@ -322,7 +327,7 @@ const MayorCuenta = () => {
                       rowSpan={libro.filas.length}
                       sx={{ fontSize: "1.1rem", borderColor: "black" }}
                     >
-                      {new Date(libro.fecha).toLocaleDateString("es-AR")}
+                      {formatearFecha(libro.fecha)}
                     </TableCell>
                   )}
                   {index === 0 && (
@@ -372,7 +377,7 @@ const MayorCuenta = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
