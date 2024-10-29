@@ -103,6 +103,13 @@ VALUES ('mateo@hernandez', 'mateo', '173af653133d964edfc16cafe0aba33c8f500a07f3b
 INSERT INTO usuarios (mail, nombre_usuario, contrasenia, roles_idrol)
 VALUES ('franco@liciaga', 'Franco Liciaga', '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705', 2);
 
+INSERT INTO usuarios (mail, nombre_usuario, contrasenia, roles_idrol)
+VALUES ('leandro@chivel', 'Leandro Chivel', '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705', 1);
+
+INSERT INTO usuarios (mail, nombre_usuario, contrasenia, roles_idrol)
+VALUES ('fernando@balbi', 'Fernando Balbi', '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705', 2);
+
+
 
 UPDATE usuarios  set contrasenia = '173af653133d964edfc16cafe0aba33c8f500a07f3ba3f81943916910c257705' where mail = 'mateo@hernandez'; 
 

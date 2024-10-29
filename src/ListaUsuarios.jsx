@@ -15,6 +15,8 @@ const ListaUsuarios = () => {
   const usuarios = [
     { email: "mateo@hernandez", nombre: "Mateo Hernandez", rol: "admin" },
     { email: "franco@liciaga", nombre: "Franco Liciaga", rol: "basico" },
+    { email: "leandro@chivel", nombre: "Leandro Chivel", rol: "admin" },
+    { email: "fernando@balbi", nombre: "Fernando Balbi", rol: "basico" },
   ];
 
   return (
