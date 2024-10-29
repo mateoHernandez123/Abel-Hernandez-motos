@@ -45,7 +45,15 @@ const ListaResultados = () => {
         margin: "1.2rem",
       }}
     >
-      <Typography variant="h4" sx={{ fontSize: "2rem", textAlign: "center" }}>
+      <Typography
+        variant="h4"
+        sx={{
+          marginBottom: 2,
+          color: "#333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
         Lista de Resultados
       </Typography>
 

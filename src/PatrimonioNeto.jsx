@@ -14,29 +14,48 @@ const PatrimonioNeto = ({ datos, titulo }) => {
   return (
     <>
       <Typography
-        variant="h4"
+        variant="h5"
         sx={{
           fontWeight: "bold",
-          fontSize: "1.5rem",
-          marginTop: 3,
+          marginBottom: 2,
+          color: "#333",
+          textAlign: "center",
         }}
       >
         {titulo}
       </Typography>
       <TableContainer
         component={Paper}
-        sx={{ backgroundColor: "#ffeb3b", marginBottom: 4 }}
+        sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
       >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  textAlign: "center",
+                }}
+              >
                 Activos
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  textAlign: "center",
+                }}
+              >
                 Pasivos
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  textAlign: "center",
+                }}
+              >
                 Patrimonio Neto
               </TableCell>
             </TableRow>

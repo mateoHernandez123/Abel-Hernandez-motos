@@ -101,7 +101,15 @@ const TablaDiario = () => {
 
   return (
     <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
-      <Typography variant="h4" sx={{ marginBottom: 3, color: "#0f0f0f" }}>
+      <Typography
+        variant="h4"
+        sx={{
+          marginBottom: 2,
+          color: "#333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
         Lista de Libro Diario
       </Typography>
 

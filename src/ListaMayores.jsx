@@ -1,5 +1,5 @@
 import TablaMayor from "./TablaMayor";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "./context/Context";
 import Swal from "sweetalert2";
@@ -102,6 +102,17 @@ const ListaMayores = () => {
   // Renderizar el componente
   return (
     <div>
+      <Typography
+        variant="h4"
+        sx={{
+          marginBottom: 2,
+          color: "#333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Lista de Libro Mayor
+      </Typography>
       <Box display="flex" justifyContent="space-between" mb={2}>
         <TextField
           label="Fecha Desde"

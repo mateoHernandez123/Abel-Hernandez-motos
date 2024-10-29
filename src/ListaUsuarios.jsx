@@ -30,9 +30,10 @@ const ListaUsuarios = () => {
       <Typography
         variant="h4"
         sx={{
-          marginBottom: 3,
-          color: "#0f0f0f",
-          textAling: "center",
+          marginBottom: 2,
+          color: "#333",
+          textAlign: "center",
+          fontWeight: "bold",
         }}
       >
         Lista de Usuarios

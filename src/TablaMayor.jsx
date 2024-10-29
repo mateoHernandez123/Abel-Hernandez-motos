@@ -66,7 +66,12 @@ const TablaMayor = ({ tipoMayor, datosMayor }) => {
       >
         <Typography
           variant="h4"
-          sx={{ fontWeight: "bold", marginBottom: 3, color: "#0f0f0f" }}
+          sx={{
+            fontWeight: "bold",
+            marginBottom: 2,
+            color: "#333",
+            textAlign: "center",
+          }}
         >
           Mayor de {tipoMayor}
         </Typography>
@@ -75,7 +80,15 @@ const TablaMayor = ({ tipoMayor, datosMayor }) => {
           sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
         >
           <Table
-            sx={{ minWidth: 700, fontSize: "1.4rem", width: "800px" }}
+            sx={{
+              minWidth: 700,
+              fontSize: "1.5rem",
+              width: "800px",
+              "& .MuiTableCell-root": {
+                borderColor: "black", // Aplica color negro a las líneas de celda
+                borderWidth: "1px", // Ajusta el grosor de las líneas
+              },
+            }}
             aria-label="tabla mayor"
           >
             <TableHead>

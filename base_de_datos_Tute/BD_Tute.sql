@@ -195,5 +195,3 @@ where r.idrol= (select u.roles_idrol
 
 SELECT * FROM cuentas;
 
-DELETE FROM cuentas
-WHERE idcuentas in (7,6);

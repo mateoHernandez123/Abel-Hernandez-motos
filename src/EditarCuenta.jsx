@@ -76,8 +76,9 @@ const EditarCuenta = () => {
         backgroundColor: "#ffeb3b",
         color: "black",
         padding: 4,
-        borderRadius: 2,
-        maxWidth: "600px",
+        borderRadius: 5,
+        width: "900px",
+        maxWidth: "100%",
         margin: "auto",
       }}
     >
@@ -93,7 +94,10 @@ const EditarCuenta = () => {
         <ArrowBackIcon />
       </IconButton>
 
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: 2, color: "#333", textAlign: "center" }}
+      >
         Editar Cuenta
       </Typography>
 
