@@ -100,16 +100,21 @@ const MayorCuenta = () => {
             title: "Error",
             icon: "error",
             text: data.MENSAJE,
+            color: "#fff",
+            background: "#333",
+            confirmButtonColor: "#3085d6",
           });
         } else {
           setFiltradoDatos(data.Libro || []);
-          console.log(filtradoDatos);
         }
       } catch (error) {
         Swal.fire({
           title: "Error",
           icon: "error",
           text: "Error al cargar las cuentas raíces",
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
         });
       }
     } else {
@@ -117,6 +122,9 @@ const MayorCuenta = () => {
         title: "Error",
         icon: "warning",
         text: "Por favor, seleccione fechas y una cuenta antes de filtrar.",
+        color: "#fff",
+        background: "#333",
+        confirmButtonColor: "#3085d6",
       });
     }
   };

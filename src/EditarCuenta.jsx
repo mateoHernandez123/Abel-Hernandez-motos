@@ -60,7 +60,14 @@ const EditarCuenta = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         // Lógica para eliminar la cuenta
-        Swal.fire("Eliminada", "La cuenta ha sido eliminada.", "success");
+        Swal.fire({
+          title: "Eliminada",
+          text: "La cuenta ha sido eliminada.",
+          icon: "success",
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
         navigate(-1); // Regresar a la vista anterior
       }
     });

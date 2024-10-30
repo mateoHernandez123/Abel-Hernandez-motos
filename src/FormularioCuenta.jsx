@@ -37,9 +37,6 @@ const FormularioCuenta = () => {
 
         const data = await response.json();
 
-        // Verificar la estructura de la respuesta de obtenerraices
-        console.log("Respuesta de obtenerraices:", data);
-
         if (data.AuthErr) {
           tokenError(data.MENSAJE);
         } else if (data.ServErr) {
@@ -47,12 +44,18 @@ const FormularioCuenta = () => {
             title: "Error",
             icon: "error",
             text: data.MENSAJE,
+            color: "#fff",
+            background: "#333",
+            confirmButtonColor: "#3085d6",
           });
         } else if (data.ERROR) {
           Swal.fire({
             icon: "warning",
             title: "Atención",
             text: data.MENSAJE,
+            color: "#fff",
+            background: "#333",
+            confirmButtonColor: "#3085d6",
           });
         } else {
           setCuentasRaices(data.Raices || []); // Establecer las cuentas raíces
@@ -62,6 +65,9 @@ const FormularioCuenta = () => {
           title: "Error en la carga de datos",
           icon: "error",
           text: "Hubo un problema al conectar con el servidor.",
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
         });
       }
     };
@@ -75,9 +81,6 @@ const FormularioCuenta = () => {
     try {
       const token = JSON.parse(localStorage.getItem("accessToken"));
 
-      // Verificar el valor del nombre que estamos enviando
-      console.log("Enviando Nombre:", codigoCuenta);
-
       const response = await fetch(`${IP}/api/cuentas/obtenertodoshijos`, {
         method: "POST",
         headers: {
@@ -90,9 +93,6 @@ const FormularioCuenta = () => {
       });
 
       const data = await response.json();
-
-      // Verificar la estructura de la respuesta de obtenerhijos
-      console.log("Respuesta de obtenerhijos:", data);
 
       if (data.AuthErr) {
         tokenError(data.MENSAJE);

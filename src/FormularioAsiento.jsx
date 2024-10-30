@@ -200,18 +200,6 @@ const FormularioAsiento = () => {
       setError(`No se puede registrar un asiento con valores nulos.`);
       return;
     }
-    // Validar que el 'haber' no exceda el 'monto_actual' de la cuenta
-    // for (const fila of filas) {
-    //   const cuenta = cuentasHojas.find((c) => c.codigo === fila.cuenta);
-
-    //   // Solo realizar la validación si la cuenta es encontrada
-    //   if (cuenta && parseFloat(fila.haber) > cuenta.monto_actual) {
-    //     setError(
-    //       `El monto en Haber excede el monto actual (${cuenta.monto_actual}) de la cuenta ${cuenta.nombre}.`
-    //     );
-    //     return;
-    //   }
-    // }
 
     // Preparar el objeto para enviar al backend
     const data = {
@@ -245,18 +233,27 @@ const FormularioAsiento = () => {
           title: "Error",
           icon: "error",
           text: result.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
         });
       } else if (result.ERROR) {
         Swal.fire({
           icon: "warning",
           title: "Atención",
           text: result.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
         });
       } else {
         Swal.fire({
           icon: "success",
           title: "Exito",
           text: result.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
         }).then((result) => {
           if (result.isConfirmed || result.isDismissed) {
             window.location.reload();
@@ -264,11 +261,14 @@ const FormularioAsiento = () => {
         });
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "No se pudo enviar la información al servidor",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo enviar la información al servidor",
+        icon: "error",
+        color: "#fff",
+        background: "#333",
+        confirmButtonColor: "#3085d6",
+      });
     }
 
     //Setea los campos:
