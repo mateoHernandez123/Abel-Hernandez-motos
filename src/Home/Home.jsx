@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import motoImage from "./image/fondo.jpg";
+import motoImage from "../image/fondo.jpg";
 import { useContext, useEffect } from "react";
-import {Context} from './context/Context';
+import {Context} from '../context/Context';
 import { useNavigate, replace } from "react-router-dom";
 const Home = () => {
 

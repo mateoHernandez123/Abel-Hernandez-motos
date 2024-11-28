@@ -12,7 +12,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import { Context } from "./context/Context";
+import { Context } from "../context/Context";
 import Swal from "sweetalert2";
 
 const FormularioCuenta = () => {

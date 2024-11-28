@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { Context } from './context/Context';
+import { Context } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
 import swal from'sweetalert2';
-import './css/boton.css'
+import '../css/boton.css'
 
 export default function ContenedorUsuarioSesion() {
 

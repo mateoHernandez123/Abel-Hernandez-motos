@@ -1,7 +1,7 @@
 import TablaMayor from "./TablaMayor";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { Context } from "./context/Context";
+import { Context } from "../context/Context";
 import Swal from "sweetalert2";
 
 const ListaMayores = () => {

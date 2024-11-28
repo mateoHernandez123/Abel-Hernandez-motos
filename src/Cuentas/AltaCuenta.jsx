@@ -13,7 +13,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Context } from "./context/Context";
+import { Context } from "../context/Context";
 import Swal from "sweetalert2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 

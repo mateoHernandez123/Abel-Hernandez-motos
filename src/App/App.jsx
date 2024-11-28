@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import {ContextProvider} from './context/Context.jsx'
+import { ContextProvider } from "../context/Context.jsx";
 import AppLayout from "./AppLayout";
-import AltaCuenta from "./AltaCuenta";
-import FormularioCuenta from "./FormularioCuenta";
-import FormularioAsiento from "./FormularioAsiento";
-import ListaMayores from "./ListaMayores";
-import ListaResultados from "./ListaResultados";
-import ListaUsuarios from "./ListaUsuarios";
-import Home from "./Home";
-import LoginPage from "./LoginPage";
-import ListaLibroDiario from "./ListaLibroDiario";
-import EditarCuenta from "./EditarCuenta";
-import MayorCuenta from "./MayorCuenta.jsx";
+import AltaCuenta from "../Cuentas/AltaCuenta";
+import FormularioCuenta from "../Cuentas/FormularioCuenta";
+import FormularioAsiento from "../Asientos/FormularioAsiento";
+import ListaMayores from "../Mayor/ListaMayores";
+import ListaResultados from "../Resultado/ListaResultados";
+import ListaUsuarios from "../Usuario/ListaUsuarios";
+import Home from "../Home/Home";
+import LoginPage from "../Login/LoginPage";
+import ListaLibroDiario from "../Diario/ListaLibroDiario";
+import EditarCuenta from "../Cuentas/EditarCuenta";
+import MayorCuenta from "../Mayor/MayorCuenta.jsx";
 
 const App = () => {
   return (

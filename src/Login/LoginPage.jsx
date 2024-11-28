@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 
-import { Context } from "./context/Context";
+import { Context } from "../context/Context";
 
 const ip = "localhost:3002";
 

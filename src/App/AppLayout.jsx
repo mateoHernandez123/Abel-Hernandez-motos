@@ -18,8 +18,8 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import PieChartIcon from "@mui/icons-material/PieChart";
 import GroupIcon from "@mui/icons-material/Group";
 import { useContext, useEffect } from "react";
-import { Context } from "./context/Context";
-import ContenedorUsuarioSesion from "./ContenedorUsuarioSesion.jsx";
+import { Context } from "../context/Context";
+import ContenedorUsuarioSesion from "../Login/ContenedorUsuarioSesion.jsx";
 
 const drawerWidth = 240;
 
