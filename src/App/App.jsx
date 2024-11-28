@@ -12,6 +12,7 @@ import LoginPage from "../Login/LoginPage";
 import ListaLibroDiario from "../Diario/ListaLibroDiario";
 import EditarCuenta from "../Cuentas/EditarCuenta";
 import MayorCuenta from "../Mayor/MayorCuenta.jsx";
+import AltaProveedor from "../Abastecimientos/AltaProveedor.jsx";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
                   <Route path="/usuarios" element={<ListaUsuarios />} />
                   <Route path="/" element={<Home />} />
                   <Route path="/editar-cuenta" element={<EditarCuenta />} />
+                  <Route path="/alta-proveedor" element={<AltaProveedor />} />
                 </Routes>
               </AppLayout>
             }
