@@ -17,6 +17,7 @@ import BookIcon from "@mui/icons-material/Book";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import PieChartIcon from "@mui/icons-material/PieChart";
 import StoreIcon from "@mui/icons-material/Store";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 import GroupIcon from "@mui/icons-material/Group";
 import { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
@@ -156,6 +157,20 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText
                 primary={"Alta Proveedor"}
+                sx={{ color: "yellow" }}
+              />
+            </ListItem>
+
+            <ListItem
+              component={Link}
+              to={"/alta-producto"}
+              key={"alta-producto"}
+            >
+              <ListItemIcon sx={{ color: "yellow" }}>
+                <Inventory2Icon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Alta Producto"}
                 sx={{ color: "yellow" }}
               />
             </ListItem>

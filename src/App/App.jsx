@@ -13,6 +13,7 @@ import ListaLibroDiario from "../Diario/ListaLibroDiario";
 import EditarCuenta from "../Cuentas/EditarCuenta";
 import MayorCuenta from "../Mayor/MayorCuenta.jsx";
 import AltaProveedor from "../Abastecimientos/AltaProveedor.jsx";
+import AltaProducto from "../Abastecimientos/AltaProducto.jsx";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/editar-cuenta" element={<EditarCuenta />} />
                   <Route path="/alta-proveedor" element={<AltaProveedor />} />
+                  <Route path="/alta-producto" element={<AltaProducto />} />
                 </Routes>
               </AppLayout>
             }
