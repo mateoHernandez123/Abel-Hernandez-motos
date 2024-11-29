@@ -22,6 +22,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
 import ContenedorUsuarioSesion from "../Login/ContenedorUsuarioSesion.jsx";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const drawerWidth = 240;
 
@@ -171,6 +172,34 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText
                 primary={"Alta Producto"}
+                sx={{ color: "yellow" }}
+              />
+            </ListItem>
+
+            <ListItem
+              component={Link}
+              to={"/solicitud-compra"}
+              key={"solicitud-compra"}
+            >
+              <ListItemIcon sx={{ color: "yellow" }}>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Solicitud De Compra"}
+                sx={{ color: "yellow" }}
+              />
+            </ListItem>
+
+            <ListItem
+              component={Link}
+              to={"/orden-compra"}
+              key={"orden-compra"}
+            >
+              <ListItemIcon sx={{ color: "yellow" }}>
+                <ReceiptIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Orden De Compra"}
                 sx={{ color: "yellow" }}
               />
             </ListItem>

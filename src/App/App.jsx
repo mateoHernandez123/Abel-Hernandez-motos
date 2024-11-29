@@ -14,6 +14,8 @@ import EditarCuenta from "../Cuentas/EditarCuenta";
 import MayorCuenta from "../Mayor/MayorCuenta.jsx";
 import AltaProveedor from "../Abastecimientos/AltaProveedor.jsx";
 import AltaProducto from "../Abastecimientos/AltaProducto.jsx";
+import FormularioSolicitudCompra from "../Abastecimientos/SolicitudDeCompra/FormularioSolicitudCompra.jsx";
+import FormularioOrdenCompra from "../Abastecimientos/OrdenDeCompra/FormularioOrdenCompra.jsx";
 
 const App = () => {
   return (
@@ -39,6 +41,8 @@ const App = () => {
                   <Route path="/editar-cuenta" element={<EditarCuenta />} />
                   <Route path="/alta-proveedor" element={<AltaProveedor />} />
                   <Route path="/alta-producto" element={<AltaProducto />} />
+                  <Route path="/solicitud-compra" element={<FormularioSolicitudCompra />} />
+                  <Route path="/orden-compra" element={<FormularioOrdenCompra />} />
                 </Routes>
               </AppLayout>
             }
