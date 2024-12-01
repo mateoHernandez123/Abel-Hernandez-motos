@@ -272,6 +272,12 @@ const AltaProveedor = () => {
             />
           }
           label="Proveedor Activo"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            color: "#333",
+            justifyContent: "center",
+          }}
         />
         <TextField
           fullWidth

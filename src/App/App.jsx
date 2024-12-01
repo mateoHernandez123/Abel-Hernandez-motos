@@ -16,6 +16,7 @@ import AltaProveedor from "../Abastecimientos/AltaProveedor.jsx";
 import AltaProducto from "../Abastecimientos/AltaProducto.jsx";
 import FormularioSolicitudCompra from "../Abastecimientos/SolicitudDeCompra/FormularioSolicitudCompra.jsx";
 import FormularioOrdenCompra from "../Abastecimientos/OrdenDeCompra/FormularioOrdenCompra.jsx";
+import FiltrarProductos from "../Abastecimientos/FiltrarProductos.jsx";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
                   <Route path="/alta-producto" element={<AltaProducto />} />
                   <Route path="/solicitud-compra" element={<FormularioSolicitudCompra />} />
                   <Route path="/orden-compra" element={<FormularioOrdenCompra />} />
+                  <Route path="/productos" element={<FiltrarProductos />} />
                 </Routes>
               </AppLayout>
             }

@@ -8,10 +8,12 @@ import {
   InputLabel,
   Typography,
   Box,
+  IconButton,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { Context } from "../context/Context";
 import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AltaProducto = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context);
@@ -68,6 +70,10 @@ const AltaProducto = () => {
     });
   };
 
+  const handleListarProductos = () => {
+    navigate("/productos");
+  };
+
   const handleSubmit = () => {
     const {
       codigo,
@@ -117,6 +123,17 @@ const AltaProducto = () => {
         margin: "auto",
       }}
     >
+      <IconButton
+        onClick={handleListarProductos}
+        sx={{
+          backgroundColor: "#ffeb3b",
+          "&:hover": { backgroundColor: "#fdd835" },
+          color: "#333",
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+
       <Typography
         variant="h4"
         sx={{ marginBottom: 2, color: "#333", textAlign: "center" }}

@@ -156,24 +156,18 @@ const AppLayout = ({ children }) => {
               <ListItemIcon sx={{ color: "yellow" }}>
                 <StoreIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={"Alta Proveedor"}
-                sx={{ color: "yellow" }}
-              />
+              <ListItemText primary={"Proveedores"} sx={{ color: "yellow" }} />
             </ListItem>
 
             <ListItem
               component={Link}
-              to={"/alta-producto"}
-              key={"alta-producto"}
+              to={"/productos"}
+              key={"productos"}
             >
               <ListItemIcon sx={{ color: "yellow" }}>
                 <Inventory2Icon />
               </ListItemIcon>
-              <ListItemText
-                primary={"Alta Producto"}
-                sx={{ color: "yellow" }}
-              />
+              <ListItemText primary={"Productos"} sx={{ color: "yellow" }} />
             </ListItem>
 
             <ListItem
