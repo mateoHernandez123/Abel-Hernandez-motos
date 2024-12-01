@@ -24,6 +24,7 @@ body {
   padding: 0; /* Elimina cualquier padding adicional */
   overflow-x: hidden; /* Elimina el desplazamiento horizontal */
   overflow-y: auto; /* Mantiene el desplazamiento vertical */
+  padding-right: 8rem;
 }
 
 a {
