@@ -47,7 +47,7 @@ const FormularioOrdenCompra = () => {
   const [solicitante, setSolicitante] = useState("");
   const [departamento, setDepartamento] = useState("");
   const [productos, setProductos] = useState([
-    { codigo: "", descripcion: "", cantidad: 0, precio: 0, total: 0 },
+    { producto: "", descripcion: "", cantidad: 0, precio: 0, total: 0 },
   ]);
   const [subtotal, setSubtotal] = useState(0);
   const [iva, setIva] = useState(0);
@@ -69,7 +69,7 @@ const FormularioOrdenCompra = () => {
   const agregarProducto = () => {
     setProductos([
       ...productos,
-      { codigo: "", descripcion: "", cantidad: 0, precio: 0, total: 0 },
+      { producto: "", descripcion: "", cantidad: 0, precio: 0, total: 0 },
     ]);
   };
 
@@ -225,7 +225,7 @@ const FormularioOrdenCompra = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Código</TableCell>
+              <TableCell align="center">Producto</TableCell>
               <TableCell align="center">Descripción</TableCell>
               <TableCell align="center">Cantidad</TableCell>
               <TableCell align="center">Precio Unitario</TableCell>
@@ -238,9 +238,9 @@ const FormularioOrdenCompra = () => {
               <TableRow key={index}>
                 <TableCell>
                   <TextField
-                    value={producto.codigo}
+                    value={producto.producto}
                     onChange={(e) =>
-                      handleProductoChange(index, "codigo", e.target.value)
+                      handleProductoChange(index, "producto", e.target.value)
                     }
                     fullWidth
                   />

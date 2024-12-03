@@ -34,11 +34,12 @@ const AltaProducto = () => {
     modelo: "",
     precioVenta: "",
     precioCompra: "",
+    iva: "",
     stockActual: "",
     stockMaximo: "",
     stockMinimo: "",
     puntoReposicion: "",
-    precioPromedioPonderado: "",
+    // precioPromedioPonderado: "",
     fechaAlta: "",
     categoria: "",
     proveedor: "",
@@ -83,6 +84,7 @@ const AltaProducto = () => {
       modelo,
       precioVenta,
       precioCompra,
+      iva,
     } = formData;
 
     if (
@@ -92,7 +94,8 @@ const AltaProducto = () => {
       !marca ||
       !modelo ||
       !precioVenta ||
-      !precioCompra
+      !precioCompra ||
+      !iva
     ) {
       Swal.fire({
         title: "Error",
@@ -209,6 +212,17 @@ const AltaProducto = () => {
           margin="normal"
           required
         />
+        <TextField
+          fullWidth
+          label="IVA %"
+          name="iva"
+          type="number"
+          inputProps={{ min: 0 }}
+          value={formData.iva}
+          onChange={handleInputChange}
+          margin="normal"
+          required
+        />
       </Box>
 
       <Typography variant="h6">Stock</Typography>
@@ -253,7 +267,7 @@ const AltaProducto = () => {
           onChange={handleInputChange}
           margin="normal"
         />
-        <TextField
+        {/* <TextField ESTO NO VA: CORRECION DE LEA
           fullWidth
           label="Precio Promedio Ponderado"
           name="precioPromedioPonderado"
@@ -262,7 +276,7 @@ const AltaProducto = () => {
           value={formData.precioPromedioPonderado}
           onChange={handleInputChange}
           margin="normal"
-        />
+        /> */}
       </Box>
 
       <Typography variant="h6">Otros</Typography>

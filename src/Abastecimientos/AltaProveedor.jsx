@@ -40,14 +40,14 @@ const AltaProveedor = () => {
     numeroCuenta: "",
     cbu: "",
     tipoProveedor: "",
-    articulo: "",
+    rubro: "",
     proveedorActivo: false,
     calificacion: "",
     comentarios: "",
   });
 
   const tiposProveedores = ["Minorista", "Mayorista", "Exportador", "Otro"];
-  const articulos = ["Artículo A", "Artículo B", "Artículo C"];
+  const rubros = ["Tecnología", "Soporte"];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -246,15 +246,15 @@ const AltaProveedor = () => {
           </Select>
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <InputLabel>Artículo</InputLabel>
+          <InputLabel>Rubro</InputLabel>
           <Select
-            name="articulo"
-            value={formData.articulo}
+            name="rubro"
+            value={formData.rubro}
             onChange={handleInputChange}
           >
-            {articulos.map((articulo) => (
-              <MenuItem key={articulo} value={articulo}>
-                {articulo}
+            {rubros.map((rubro) => (
+              <MenuItem key={rubro} value={rubro}>
+                {rubro}
               </MenuItem>
             ))}
           </Select>
