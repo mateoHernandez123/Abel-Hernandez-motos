@@ -150,8 +150,8 @@ const AppLayout = ({ children }) => {
             )}
             <ListItem
               component={Link}
-              to={"/alta-proveedor"}
-              key={"alta-proveedor"}
+              to={"/proveedores"}
+              key={"proveedores"}
             >
               <ListItemIcon sx={{ color: "yellow" }}>
                 <StoreIcon />

@@ -10,10 +10,12 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { Context } from "../../context/Context";
 import { useNavigate } from "react-router-dom"; // Asegúrate de importar esto
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AltaProveedor = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context); // Mueve el useContext aquí
@@ -25,6 +27,10 @@ const AltaProveedor = () => {
       navigate("/login", { replace: true });
     }
   }, [usuarioAutenticado, navigate, deslogear]); // Asegúrate de incluir `deslogear` como dependencia
+
+  const handleListarProveedores = () => {
+    navigate("/proveedores");
+  };
 
   const [formData, setFormData] = useState({
     nombreProveedor: "",
@@ -110,6 +116,16 @@ const AltaProveedor = () => {
         margin: "auto",
       }}
     >
+      <IconButton
+        onClick={handleListarProveedores}
+        sx={{
+          backgroundColor: "#ffeb3b",
+          "&:hover": { backgroundColor: "#fdd835" },
+          color: "#333",
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
       <Typography
         variant="h4"
         sx={{ marginBottom: 2, color: "#333", textAlign: "center" }}
