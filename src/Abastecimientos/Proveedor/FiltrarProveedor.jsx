@@ -213,7 +213,15 @@ const FiltrarProveedor = () => {
 
   return (
     <Box sx={{ padding: 4, backgroundColor: "#e6e2d5", borderRadius: 5 }}>
-      <Typography variant="h4" sx={{ marginBottom: 4, textAlign: "center" }}>
+      <Typography
+        variant="h4"
+        sx={{
+          marginBottom: 4,
+          color: "#333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
         Listado de Proveedores
       </Typography>
 

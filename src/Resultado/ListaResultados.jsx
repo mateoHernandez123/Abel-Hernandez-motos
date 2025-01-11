@@ -80,7 +80,17 @@ const ListaResultados = () => {
         component={Paper}
         sx={{ backgroundColor: "#ffeb3b", marginBottom: 4, borderRadius: 5 }}
       >
-        <Table sx={{ width: "750px" }}>
+        <Table
+          sx={{
+            minWidth: 700,
+            fontSize: "1.5rem",
+            width: "800px",
+            "& .MuiTableCell-root": {
+              borderColor: "black", // Aplica color negro a las líneas de celda
+              borderWidth: "1px", // Ajusta el grosor de las líneas
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell
