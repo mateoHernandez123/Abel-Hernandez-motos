@@ -12,7 +12,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import Swal from "sweetalert2";
-import { Context } from "../context/Context";
+import { Context } from "../../context/Context";
 import { useNavigate } from "react-router-dom"; // Asegúrate de importar esto
 
 const AltaProveedor = () => {

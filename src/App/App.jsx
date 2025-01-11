@@ -12,11 +12,11 @@ import LoginPage from "../Login/LoginPage";
 import ListaLibroDiario from "../Diario/ListaLibroDiario";
 import EditarCuenta from "../Cuentas/EditarCuenta";
 import MayorCuenta from "../Mayor/MayorCuenta.jsx";
-import AltaProveedor from "../Abastecimientos/AltaProveedor.jsx";
-import AltaProducto from "../Abastecimientos/AltaProducto.jsx";
+import AltaProveedor from "../Abastecimientos/Proveedor/AltaProveedor.jsx";
+import AltaProducto from "../Abastecimientos/Productos/AltaProducto.jsx";
 import FormularioSolicitudCompra from "../Abastecimientos/SolicitudDeCompra/FormularioSolicitudCompra.jsx";
 import FormularioOrdenCompra from "../Abastecimientos/OrdenDeCompra/FormularioOrdenCompra.jsx";
-import FiltrarProductos from "../Abastecimientos/FiltrarProductos.jsx";
+import FiltrarProductos from "../Abastecimientos/Productos/FiltrarProductos.jsx";
 
 const App = () => {
   return (
@@ -42,8 +42,14 @@ const App = () => {
                   <Route path="/editar-cuenta" element={<EditarCuenta />} />
                   <Route path="/alta-proveedor" element={<AltaProveedor />} />
                   <Route path="/alta-producto" element={<AltaProducto />} />
-                  <Route path="/solicitud-compra" element={<FormularioSolicitudCompra />} />
-                  <Route path="/orden-compra" element={<FormularioOrdenCompra />} />
+                  <Route
+                    path="/solicitud-compra"
+                    element={<FormularioSolicitudCompra />}
+                  />
+                  <Route
+                    path="/orden-compra"
+                    element={<FormularioOrdenCompra />}
+                  />
                   <Route path="/productos" element={<FiltrarProductos />} />
                 </Routes>
               </AppLayout>

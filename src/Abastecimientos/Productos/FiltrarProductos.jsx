@@ -12,12 +12,16 @@ import {
   MenuItem,
   TextField,
   IconButton,
+  Checkbox,
+  FormControlLabel,
+  Popover,
 } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Context } from "../context/Context";
+import { Context } from "../../context/Context";
 import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const FiltrarProductos = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context);
@@ -33,6 +37,16 @@ const FiltrarProductos = () => {
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const [productos, setProductos] = useState([]);
+
+  const [anchorEl, setAnchorEl] = useState(null); // Estado del Popover
+  const [selectedColumns, setSelectedColumns] = useState([
+    "Código",
+    "Nombre",
+    "Categoría",
+    "Precio de Venta",
+  ]);
+
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -81,7 +95,6 @@ const FiltrarProductos = () => {
       const filtrados = productosMock.filter(
         (producto) => producto.categoria === categoriaSeleccionada
       );
-      console.log(filtrados);
       setProductos(filtrados);
     } catch (error) {
       Swal.fire({
@@ -95,6 +108,22 @@ const FiltrarProductos = () => {
   const handleLimpiar = () => {
     setCategoriaSeleccionada("");
     setProductos([]);
+  };
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleColumnChange = (column) => {
+    setSelectedColumns((prev) =>
+      prev.includes(column)
+        ? prev.filter((col) => col !== column)
+        : [...prev, column]
+    );
   };
 
   // Mapeo de columnas a propiedades del producto
@@ -198,12 +227,7 @@ const FiltrarProductos = () => {
         Listado de Productos
       </Typography>
 
-      <Box
-        display="flex"
-        alignItems="center" // Alinea verticalmente los elementos
-        justifyContent="space-between" // Distribuye los elementos: grupo a la izquierda, botón al final
-        mb={2}
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
         <Box display="flex" alignItems="center">
           <TextField
             label="Categoría"
@@ -243,6 +267,7 @@ const FiltrarProductos = () => {
             sx={{
               backgroundColor: "#ffeb3b",
               color: "black",
+              marginRight: 5,
               borderRadius: "1.2rem",
             }}
           >
@@ -250,48 +275,64 @@ const FiltrarProductos = () => {
           </Button>
         </Box>
 
-        <IconButton
-          variant="contained"
-          onClick={handleAgregarProducto}
-          sx={{
-            backgroundColor: "#ffeb3b",
-            "&:hover": { backgroundColor: "#fdd835" },
-            color: "#333",
-          }}
-        >
-          <AddIcon />
-        </IconButton>
+        <Box>
+          <Button
+            variant="contained"
+            onClick={handlePopoverOpen}
+            sx={{
+              backgroundColor: "#ffeb3b",
+              "&:hover": { backgroundColor: "#fdd835" },
+              color: "#333",
+              borderRadius: "3rem",
+              marginRight: 2,
+            }}
+          >
+            <SettingsIcon />
+          </Button>
+
+          <IconButton
+            variant="contained"
+            onClick={handleAgregarProducto}
+            sx={{
+              backgroundColor: "#ffeb3b",
+              "&:hover": { backgroundColor: "#fdd835" },
+              color: "#333",
+            }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Box>
       </Box>
 
-      {renderTable(
-        [
-          "Código",
-          "Código de Barras",
-          "Nombre",
-          "Marca",
-          "Categoría",
-          "Modelo",
-          "Punto de Reposición",
-          "Almacén",
-          "Imagen",
-        ],
-        productos
-      )}
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column", // Asegura que las opciones se dispongan verticalmente
+          }}
+        >
+          {Object.keys(columnToProperty).map((column) => (
+            <FormControlLabel
+              key={column}
+              control={
+                <Checkbox
+                  checked={selectedColumns.includes(column)}
+                  onChange={() => handleColumnChange(column)}
+                />
+              }
+              label={column}
+            />
+          ))}
+        </Box>
+      </Popover>
 
-      {renderTable(
-        [
-          "Nombre",
-          "Precio de Venta",
-          "Precio de Compra",
-          "Precio Promedio",
-          "Stock Actual",
-          "Stock Máximo",
-          "Stock Mínimo",
-          "Fecha de Alta",
-          "Proveedor",
-        ],
-        productos
-      )}
+      {renderTable(selectedColumns, productos)}
     </Box>
   );
 };

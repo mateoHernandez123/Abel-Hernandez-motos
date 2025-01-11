@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import Swal from "sweetalert2";
-import { Context } from "../context/Context";
+import { Context } from "../../context/Context";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
