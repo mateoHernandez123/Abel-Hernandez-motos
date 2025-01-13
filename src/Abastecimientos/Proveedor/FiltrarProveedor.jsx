@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import { Context } from "../../context/Context";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
+import EditIcon from "@mui/icons-material/Edit";
 
 const FiltrarProveedor = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context);
@@ -157,7 +158,6 @@ const FiltrarProveedor = () => {
     <TableContainer
       component={Paper}
       sx={{
-        backgroundColor: "#ffeb3b",
         marginBottom: 4,
         borderRadius: 5,
       }}
@@ -178,6 +178,7 @@ const FiltrarProveedor = () => {
               <TableCell
                 key={column}
                 sx={{
+                  backgroundColor: "#ffeb3b",
                   fontWeight: "bold",
                   fontSize: "1.2rem",
                   borderColor: "black",
@@ -187,6 +188,17 @@ const FiltrarProveedor = () => {
                 {column}
               </TableCell>
             ))}
+            <TableCell
+              sx={{
+                backgroundColor: "#ffeb3b",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                borderColor: "black",
+                textAlign: "center",
+              }}
+            >
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -196,6 +208,7 @@ const FiltrarProveedor = () => {
                 <TableCell
                   key={colIndex}
                   sx={{
+                    backgroundColor: "#e0e0e0",
                     fontSize: "1.1rem",
                     borderColor: "black",
                     textAlign: "center",
@@ -204,6 +217,20 @@ const FiltrarProveedor = () => {
                   {row[columnToProperty[column]]}
                 </TableCell>
               ))}
+              <TableCell
+                sx={{
+                  textAlign: "center",
+                  backgroundColor: "#e0e0e0",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(`/editar-proveedor/${row.cuit}`)}
+                >
+                  <EditIcon />
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

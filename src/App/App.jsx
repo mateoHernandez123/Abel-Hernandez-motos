@@ -18,7 +18,7 @@ import FormularioSolicitudCompra from "../Abastecimientos/SolicitudDeCompra/Form
 import FormularioOrdenCompra from "../Abastecimientos/OrdenDeCompra/FormularioOrdenCompra.jsx";
 import FiltrarProductos from "../Abastecimientos/Productos/FiltrarProductos.jsx";
 import FiltrarProveedor from "../Abastecimientos/Proveedor/FiltrarProveedor.jsx";
-
+import EditarProveedor from "../Abastecimientos/Proveedor/EditarProveedor.jsx";
 
 const App = () => {
   return (
@@ -54,6 +54,10 @@ const App = () => {
                   />
                   <Route path="/productos" element={<FiltrarProductos />} />
                   <Route path="/proveedores" element={<FiltrarProveedor />} />
+                  <Route
+                    path="/editar-proveedor/:cuit"
+                    element={<EditarProveedor />}
+                  />
                 </Routes>
               </AppLayout>
             }
