@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import { Context } from "../../context/Context";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
+import EditIcon from "@mui/icons-material/Edit";
 
 const FiltrarProductos = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context);
@@ -151,7 +152,6 @@ const FiltrarProductos = () => {
     <TableContainer
       component={Paper}
       sx={{
-        backgroundColor: "#ffeb3b",
         marginBottom: 4,
         borderRadius: 5,
       }}
@@ -176,11 +176,23 @@ const FiltrarProductos = () => {
                   fontSize: "1.4rem",
                   borderColor: "black",
                   textAlign: "center",
+                  backgroundColor: "#ffeb3b",
                 }}
               >
                 {column}
               </TableCell>
             ))}
+            <TableCell
+              sx={{
+                backgroundColor: "#ffeb3b",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+                borderColor: "black",
+                textAlign: "center",
+              }}
+            >
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -193,6 +205,7 @@ const FiltrarProductos = () => {
                     fontSize: "1.1rem",
                     borderColor: "black",
                     textAlign: "center",
+                    backgroundColor: "#e0e0e0",
                   }}
                 >
                   {column === "Imagen" ? (
@@ -206,6 +219,20 @@ const FiltrarProductos = () => {
                   )}
                 </TableCell>
               ))}
+              <TableCell
+                sx={{
+                  textAlign: "center",
+                  backgroundColor: "#e0e0e0",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(`/editar-producto/${row.codigo}`)}
+                >
+                  <EditIcon />
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

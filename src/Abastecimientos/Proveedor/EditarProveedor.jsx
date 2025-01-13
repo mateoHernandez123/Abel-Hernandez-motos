@@ -10,9 +10,11 @@ import {
   InputLabel,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditarProveedor = () => {
   const { cuit } = useParams();
@@ -58,6 +60,10 @@ const EditarProveedor = () => {
     });
   };
 
+  const handleListarProveedores = () => {
+    navigate("/proveedores");
+  };
+
   const handleSave = () => {
     Swal.fire("Éxito", "Proveedor actualizado correctamente", "success");
     navigate("/proveedores");
@@ -92,7 +98,21 @@ const EditarProveedor = () => {
         margin: "auto",
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 4 }}>
+      <IconButton
+        color="primary"
+        onClick={handleListarProveedores}
+        sx={{
+          backgroundColor: "#ffeb3b",
+          "&:hover": { backgroundColor: "#fdd835" },
+          color: "#333",
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: 4, textAlign: "center", fontWeight: "bold" }}
+      >
         Editar Proveedor
       </Typography>
       <Box mb={2}>

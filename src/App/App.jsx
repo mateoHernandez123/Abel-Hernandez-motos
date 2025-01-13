@@ -19,6 +19,7 @@ import FormularioOrdenCompra from "../Abastecimientos/OrdenDeCompra/FormularioOr
 import FiltrarProductos from "../Abastecimientos/Productos/FiltrarProductos.jsx";
 import FiltrarProveedor from "../Abastecimientos/Proveedor/FiltrarProveedor.jsx";
 import EditarProveedor from "../Abastecimientos/Proveedor/EditarProveedor.jsx";
+import EditarProducto from "../Abastecimientos/Productos/EditarProducto.jsx";
 
 const App = () => {
   return (
@@ -57,6 +58,10 @@ const App = () => {
                   <Route
                     path="/editar-proveedor/:cuit"
                     element={<EditarProveedor />}
+                  />
+                  <Route
+                    path="/editar-producto/:codigo"
+                    element={<EditarProducto />}
                   />
                 </Routes>
               </AppLayout>
