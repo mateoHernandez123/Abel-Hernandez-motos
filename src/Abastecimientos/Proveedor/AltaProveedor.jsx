@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { Context } from "../../context/Context";
 import { useNavigate } from "react-router-dom"; // Asegúrate de importar esto
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import axios from "axios"; // Importar axios para llamadas HTTP
 
 const AltaProveedor = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context); // Mueve el useContext aquí
@@ -54,6 +55,54 @@ const AltaProveedor = () => {
 
   const tiposProveedores = ["Minorista", "Mayorista", "Exportador", "Otro"];
   const rubros = ["Tecnología", "Soporte"];
+  const [provincias, setProvincias] = useState([]);
+  const [ciudades, setCiudades] = useState([]);
+  // Obtener provincias al montar el componente
+  useEffect(() => {
+    axios
+      .get("https://apis.datos.gob.ar/georef/api/provincias")
+      .then((response) => {
+        setProvincias(response.data.provincias);
+      })
+      .catch((error) => {
+        console.error("Error al obtener provincias:", error);
+      });
+  }, []);
+
+  // Manejar cambio de provincia
+  const handleProvinciaChange = (e) => {
+    const provinciaId = e.target.value;
+    setFormData({
+      ...formData,
+      provincia: provinciaId,
+      ciudad: "",
+      codigoPostal: "",
+    });
+    console.log(provinciaId);
+    // Obtener ciudades de la provincia seleccionada
+    axios
+      .get(
+        `https://apis.datos.gob.ar/georef/api/municipios?provincia=${provinciaId}&campos=nombre&max=1000`
+      )
+      .then((response) => {
+        setCiudades(response.data.municipios); // Corrige a 'municipios'
+      })
+      .catch((error) => {
+        console.error("Error al obtener ciudades:", error);
+      });
+  };
+
+  // Manejar cambio de ciudad
+  const handleCiudadChange = (e) => {
+    const ciudadSeleccionada = ciudades.find(
+      (ciudad) => ciudad.nombre === e.target.value
+    );
+    setFormData({
+      ...formData,
+      ciudad: ciudadSeleccionada?.nombre || "",
+      codigoPostal: ciudadSeleccionada?.codigo_postal || "",
+    });
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -188,30 +237,45 @@ const AltaProveedor = () => {
           onChange={handleInputChange}
           margin="normal"
         />
-        <TextField
-          fullWidth
-          label="Ciudad"
-          name="ciudad"
-          value={formData.ciudad}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Provincia"
-          name="provincia"
-          value={formData.provincia}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Código Postal"
-          name="codigoPostal"
-          value={formData.codigoPostal}
-          onChange={handleInputChange}
-          margin="normal"
-        />
+        <Typography variant="h6">Ubicación</Typography>
+        <Box mb={3}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Provincia</InputLabel>
+            <Select
+              name="provincia"
+              value={formData.provincia}
+              onChange={handleProvinciaChange}
+            >
+              {provincias.map((provincia) => (
+                <MenuItem key={provincia.id} value={provincia.id}>
+                  {provincia.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal" disabled={!formData.provincia}>
+            <InputLabel>Ciudad</InputLabel>
+            <Select
+              name="ciudad"
+              value={formData.ciudad}
+              onChange={handleCiudadChange}
+            >
+              {ciudades?.length > 0 &&
+                ciudades.map((ciudad) => (
+                  <MenuItem key={ciudad.id} value={ciudad.nombre}>
+                    {ciudad.nombre}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+          <TextField
+            fullWidth
+            label="Código Postal"
+            name="codigoPostal"
+            value={formData.codigoPostal}
+            margin="normal"
+          />
+        </Box>
       </Box>
 
       <Typography variant="h6">Datos Bancarios</Typography>
