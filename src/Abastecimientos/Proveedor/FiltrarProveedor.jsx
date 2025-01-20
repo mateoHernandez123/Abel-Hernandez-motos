@@ -25,7 +25,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 
 const FiltrarProveedor = () => {
-  const { usuarioAutenticado, deslogear } = useContext(Context);
+  const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const FiltrarProveedor = () => {
   const [rubros, setRubros] = useState([]);
   const [rubroSeleccionado, setRubroSeleccionado] = useState("");
   const [proveedores, setProveedores] = useState([]);
+  const [paginas, setPaginas] = useState();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([
@@ -71,6 +72,55 @@ const FiltrarProveedor = () => {
       }
     };
     fetchRubros();
+
+    const fetchProveedores = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("accessToken"));
+        const response = await fetch(`${IP}/api/proveedores/listar/1?all=1`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.AuthErr) {
+          tokenError(data.MENSAJE);
+        } else if (data.ServErr) {
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: data.MENSAJE,
+            color: "#fff",
+            background: "#333",
+            confirmButtonColor: "#3085d6",
+          });
+        } else if (data.ERROR) {
+          Swal.fire({
+            icon: "warning",
+            title: "Atención",
+            text: data.MENSAJE,
+            color: "#fff",
+            background: "#333",
+            confirmButtonColor: "#3085d6",
+          });
+        } else {
+          setProveedores(data.ListaProv); // Establecer los proveedores
+          setPaginas(data.TotalPaginas); //Establecer las paginas que se van a mostrar
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error en la carga de datos",
+          icon: "error",
+          text: "Hubo un problema al conectar con el servidor.",
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
+      }
+    };
+    fetchProveedores();
   }, []);
 
   const handleAgregarProveedor = () => {
@@ -103,7 +153,7 @@ const FiltrarProveedor = () => {
       const filtrados = proveedoresMock.filter(
         (proveedor) => proveedor.rubro === rubroSeleccionado
       );
-      setProveedores(filtrados);
+      //setProveedores(filtrados);
     } catch (error) {
       Swal.fire({
         title: "Error",
@@ -135,24 +185,21 @@ const FiltrarProveedor = () => {
   };
 
   const columnToProperty = {
-    "Nombre Proveedor": "nombreProveedor",
-    "Razón Social": "razonSocial",
+    "Nombre Proveedor": "nombre",
+    "Razón Social": "razon_social",
     CUIT: "cuit",
     Teléfono: "telefono",
     Correo: "correo",
     Dirección: "direccion",
     Ciudad: "ciudad",
     Provincia: "provincia",
-    "Código Postal": "codigoPostal",
-    Banco: "banco",
-    "Número de Cuenta": "numeroCuenta",
-    CBU: "cbu",
-    "Tipo de Proveedor": "tipoProveedor",
+    "Código Postal": "codigo_postal",
+    "Tipo de Proveedor": "tipo_proveedor",
     Rubro: "rubro",
-    Activo: "proveedorActivo",
-    Calificación: "calificacion",
-    Comentarios: "comentarios",
+    Activo: "activo",
   };
+
+  console.log(proveedores);
 
   const renderTable = (columns, data) => (
     <TableContainer

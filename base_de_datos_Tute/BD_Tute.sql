@@ -1,4 +1,4 @@
-rolescreate database SSAA2;
+create database SSAA2;
 use SSAA2;
 
 -- Tabla Roles:
@@ -88,6 +88,30 @@ CREATE TABLE cuenta_asiento (
   FOREIGN KEY (cuenta_id) REFERENCES cuentas (idcuentas)
 );
 
+-- Tabla proveedores:
+
+create table proveedores(
+	idproveedor int not null primary key auto_increment,
+    nombre varchar(100) not null,
+    cuit varchar(20) not null unique,
+    razon_social varchar(100) not null,
+    telefono VARCHAR(20) not null, 
+    correo VARCHAR(100) not null, 
+    direccion VARCHAR(200) not null, 
+    ciudad VARCHAR(100) not null, 
+    provincia VARCHAR(100) not null, 
+    codigo_postal VARCHAR(10) not null, 
+    banco VARCHAR(100) not null, 
+    nro_cuenta VARCHAR(22) not null,
+    cbu varchar(22) not null,
+    tipo_proveedor VARCHAR(50) not null, 
+    rubro VARCHAR(100) not null, 
+    calificacion INT , 
+    comentarios text,
+    activo bit not null
+)
+
+
 
 INSERT INTO roles(tipo)
 VALUES ("admin");
@@ -115,7 +139,21 @@ UPDATE usuarios  set contrasenia = '173af653133d964edfc16cafe0aba33c8f500a07f3ba
 
 
 insert into permisos(nombre)
-values('Cuentas'), ('Asientos'), ('Diarios'), ('Mayores'), ('Resultados'), ('Usuarios');
+values('Cuentas'), ('Asientos'), ('Diarios'), ('Mayores'), ('Resultados'), ('Usuarios'),('Proveedores');
+
+/*INSERTS DE PROVEEDORES*/
+
+insert into permisos(nombre)
+values('Proveedores');
+
+select * from roles_permisos;
+
+insert into roles_permisos(rol_id, permiso_id, valor)
+values(
+	(select idrol from roles where tipo = 'admin' ),
+    (select idpermiso from permisos where nombre = 'Proveedores' ),
+    1
+);
 
 insert into roles_permisos(rol_id, permiso_id, valor)
 values
@@ -147,6 +185,11 @@ values
 (
 	(select idrol from roles where tipo = 'admin' ),
     (select idpermiso from permisos where nombre = 'Usuarios' ),
+    1
+),
+(
+	(select idrol from roles where tipo = 'admin' ),
+    (select idpermiso from permisos where nombre = 'Proveedores' ),
     1
 ),
 (
