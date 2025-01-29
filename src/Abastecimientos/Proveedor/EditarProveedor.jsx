@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
@@ -15,16 +15,25 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Context } from "../../context/Context";
 
 const EditarProveedor = () => {
+  const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context); // Mueve el useContext aquí
+  const navigate = useNavigate(); // Mueve el useNavigate aquí
+
+  useEffect(() => {
+    if (!JSON.parse(localStorage.getItem("UsuarioAutenticado"))) {
+      deslogear();
+      navigate("/login", { replace: true });
+    }
+  }, [usuarioAutenticado, navigate, deslogear]); // Asegúrate de incluir `deslogear` como dependencia
   const { cuit } = useParams();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    // Simula la obtención de datos del proveedor
     const fetchProveedor = async () => {
       try {
+        // Simulación de datos
         const proveedorMock = {
           nombreProveedor: "Proveedor A",
           razonSocial: "Proveedor A S.A.",
@@ -60,23 +69,110 @@ const EditarProveedor = () => {
     });
   };
 
-  const handleListarProveedores = () => {
-    navigate("/proveedores");
-  };
+  const handleSave = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+      const Cuit = {
+        cuit: formData.cuit,
+      };
+      // Verificar si se debe activar o desactivar el proveedor
+      const activationResponse = formData.proveedorActivo
+        ? await fetch(`${IP}/api/proveedores/activar`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ Cuit }),
+          })
+        : await fetch(`${IP}/api/proveedores/desactivar`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ Cuit }),
+          });
+      console.log({ Cuit });
+      const activationData = await activationResponse.json();
 
-  const handleSave = () => {
-    Swal.fire("Éxito", "Proveedor actualizado correctamente", "success");
-    navigate("/proveedores");
-  };
+      if (activationData.AuthErr) {
+        return tokenError(activationData.MENSAJE);
+      } else if (activationData.ServErr) {
+        return Swal.fire({
+          title: "Error del Servidor",
+          icon: "error",
+          text: activationData.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
+      } else if (activationData.ERROR) {
+        return Swal.fire({
+          icon: "warning",
+          title: "Atención",
+          text: activationData.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
+      }
 
-  const handleDisable = () => {
-    Swal.fire("Éxito", "Proveedor deshabilitado", "success");
-    navigate("/proveedores");
-  };
+      // // Enviar los datos del formulario al backend para la actualización
+      // const updateResponse = await fetch(
+      //   `${IP}/api/proveedores/${formData.cuit}`,
+      //   {
+      //     method: "PUT",
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(formData),
+      //   }
+      // );
 
-  const handleDelete = () => {
-    Swal.fire("Éxito", "Proveedor eliminado", "success");
-    navigate("/proveedores");
+      // const updateData = await updateResponse.json();
+
+      // if (updateData.AuthErr) {
+      //   return tokenError(updateData.MENSAJE);
+      // } else if (updateData.ServErr) {
+      //   return Swal.fire({
+      //     title: "Error del Servidor",
+      //     icon: "error",
+      //     text: updateData.MENSAJE,
+      //     color: "#fff",
+      //     background: "#333",
+      //     confirmButtonColor: "#3085d6",
+      //   });
+      // } else if (updateData.ERROR) {
+      //   return Swal.fire({
+      //     icon: "warning",
+      //     title: "Atención",
+      //     text: updateData.MENSAJE,
+      //     color: "#fff",
+      //     background: "#333",
+      //     confirmButtonColor: "#3085d6",
+      //   });
+      // }
+
+      // Éxito: Activación/Desactivación y Actualización Completadas
+      Swal.fire({
+        title: "Proveedor Actualizado",
+        text: `Proveedor ${formData.nombreProveedor} actualizado correctamente`,
+        icon: "success",
+      });
+
+      navigate("/proveedores");
+    } catch (error) {
+      Swal.fire({
+        title: "Error en la carga de datos",
+        icon: "error",
+        text: "Hubo un problema al conectar con el servidor.",
+        color: "#fff",
+        background: "#333",
+        confirmButtonColor: "#3085d6",
+      });
+    }
   };
 
   if (!formData) {
@@ -100,7 +196,7 @@ const EditarProveedor = () => {
     >
       <IconButton
         color="primary"
-        onClick={handleListarProveedores}
+        onClick={() => navigate("/proveedores")}
         sx={{
           backgroundColor: "#ffeb3b",
           "&:hover": { backgroundColor: "#fdd835" },
@@ -282,15 +378,16 @@ const EditarProveedor = () => {
         />
       </Box>
 
-      <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-        <Button variant="contained" color="primary" onClick={handleSave}>
-          Guardar Cambios
-        </Button>
-        <Button variant="contained" color="warning" onClick={handleDisable}>
-          Deshabilitar Proveedor
-        </Button>
-        <Button variant="contained" color="error" onClick={handleDelete}>
-          Eliminar Proveedor
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          type="submit"
+          onClick={handleSave}
+          sx={{ backgroundColor: "#3b3a31", color: "#ffff", marginTop: 2 }}
+        >
+          Actualizar Proveedor
         </Button>
       </Box>
     </Box>

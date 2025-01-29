@@ -23,6 +23,8 @@ import { Context } from "../../context/Context";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const FiltrarProveedor = () => {
   const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context);
@@ -121,7 +123,7 @@ const FiltrarProveedor = () => {
       }
     };
     fetchProveedores();
-  }, []);
+  }, [[IP, tokenError]]);
 
   const handleAgregarProveedor = () => {
     navigate("/alta-proveedor");
@@ -199,8 +201,6 @@ const FiltrarProveedor = () => {
     Activo: "activo",
   };
 
-  console.log(proveedores);
-
   const renderTable = (columns, data) => (
     <TableContainer
       component={Paper}
@@ -261,7 +261,15 @@ const FiltrarProveedor = () => {
                     textAlign: "center",
                   }}
                 >
-                  {row[columnToProperty[column]]}
+                  {column === "Activo" ? (
+                    row.activo ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )
+                  ) : (
+                    row[columnToProperty[column]]
+                  )}
                 </TableCell>
               ))}
               <TableCell

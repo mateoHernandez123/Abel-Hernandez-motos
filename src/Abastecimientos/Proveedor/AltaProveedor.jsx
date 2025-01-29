@@ -19,7 +19,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios"; // Importar axios para llamadas HTTP
 
 const AltaProveedor = () => {
-  const { usuarioAutenticado, deslogear } = useContext(Context); // Mueve el useContext aquí
+  const { usuarioAutenticado, deslogear, IP, tokenError } = useContext(Context); // Mueve el useContext aquí
   const navigate = useNavigate(); // Mueve el useNavigate aquí
 
   useEffect(() => {
@@ -78,7 +78,6 @@ const AltaProveedor = () => {
       ciudad: "",
       codigoPostal: "",
     });
-    console.log(provinciaId);
     // Obtener ciudades de la provincia seleccionada
     axios
       .get(
@@ -112,7 +111,7 @@ const AltaProveedor = () => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const {
       nombreProveedor,
       razonSocial,
@@ -123,6 +122,12 @@ const AltaProveedor = () => {
       ciudad,
       provincia,
       codigoPostal,
+      banco,
+      numeroCuenta,
+      cbu,
+      tipoProveedor,
+      rubro,
+      proveedorActivo,
     } = formData;
 
     if (
@@ -134,7 +139,13 @@ const AltaProveedor = () => {
       !direccion ||
       !ciudad ||
       !provincia ||
-      !codigoPostal
+      !codigoPostal ||
+      !banco ||
+      !numeroCuenta ||
+      !cbu ||
+      !tipoProveedor ||
+      !rubro ||
+      !proveedorActivo
     ) {
       Swal.fire({
         title: "Error",
@@ -144,13 +155,77 @@ const AltaProveedor = () => {
       return;
     }
 
-    Swal.fire({
-      title: "Proveedor Agregado",
-      text: "El proveedor ha sido registrado con éxito.",
-      icon: "success",
-    });
+    const Prov = {
+      nombre: formData.nombreProveedor,
+      razon_social: formData.razonSocial,
+      cuit: formData.cuit,
+      telefono: formData.telefono,
+      correo: formData.correo,
+      direccion: formData.direccion,
+      ciudad: formData.ciudad,
+      provincia: formData.provincia,
+      codigo_postal: formData.codigoPostal,
+      banco: formData.banco,
+      nro_cuenta: formData.numeroCuenta,
+      cbu: formData.cbu,
+      tipo_proveedor: formData.tipoProveedor,
+      rubro: formData.rubro,
+      calificacion: parseInt(formData.calificacion, 10),
+      comentarios: formData.comentarios,
+      activo: formData.proveedorActivo,
+    };
 
-    console.log("Datos del proveedor:", formData);
+    try {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+      const response = await fetch(`${IP}/api/proveedores/alta`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Prov }), // Enviar los datos como objeto plano
+      });
+
+      const data = await response.json();
+
+      if (data.AuthErr) {
+        tokenError(data.MENSAJE);
+      } else if (data.ServErr) {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: data.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
+      } else if (data.ERROR) {
+        Swal.fire({
+          icon: "warning",
+          title: "Atención",
+          text: data.MENSAJE,
+          color: "#fff",
+          background: "#333",
+          confirmButtonColor: "#3085d6",
+        });
+      } else {
+        Swal.fire({
+          title: "Proveedor Agregado",
+          text: `Proveedor ${formData.nombreProveedor} agregado correctamente`,
+          icon: "success",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error en la carga de datos",
+        icon: "error",
+        text: "Hubo un problema al conectar con el servidor.",
+        color: "#fff",
+        background: "#333",
+        confirmButtonColor: "#3085d6",
+      });
+    }
+    console.log("Datos del proveedor:", Prov);
   };
 
   return (
@@ -191,6 +266,7 @@ const AltaProveedor = () => {
           value={formData.nombreProveedor}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
           required
         />
         <TextField
@@ -200,6 +276,7 @@ const AltaProveedor = () => {
           value={formData.razonSocial}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
           required
         />
         <TextField
@@ -209,6 +286,7 @@ const AltaProveedor = () => {
           value={formData.cuit}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
           required
         />
         <TextField
@@ -218,6 +296,7 @@ const AltaProveedor = () => {
           value={formData.telefono}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
           required
         />
         <TextField
@@ -227,6 +306,7 @@ const AltaProveedor = () => {
           value={formData.correo}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
           required
         />
         <TextField
@@ -236,6 +316,7 @@ const AltaProveedor = () => {
           value={formData.direccion}
           onChange={handleInputChange}
           margin="normal"
+          type="text"
         />
         <Typography variant="h6">Ubicación</Typography>
         <Box mb={3}>
@@ -245,9 +326,10 @@ const AltaProveedor = () => {
               name="provincia"
               value={formData.provincia}
               onChange={handleProvinciaChange}
+              type="text"
             >
               {provincias.map((provincia) => (
-                <MenuItem key={provincia.id} value={provincia.id}>
+                <MenuItem key={provincia.id} value={provincia.nombre}>
                   {provincia.nombre}
                 </MenuItem>
               ))}
@@ -259,6 +341,7 @@ const AltaProveedor = () => {
               name="ciudad"
               value={formData.ciudad}
               onChange={handleCiudadChange}
+              type="text"
             >
               {ciudades?.length > 0 &&
                 ciudades.map((ciudad) => (
@@ -273,7 +356,10 @@ const AltaProveedor = () => {
             label="Código Postal"
             name="codigoPostal"
             value={formData.codigoPostal}
+            onChange={handleInputChange}
+            type="text"
             margin="normal"
+            required
           />
         </Box>
       </Box>
@@ -286,6 +372,7 @@ const AltaProveedor = () => {
           name="banco"
           value={formData.banco}
           onChange={handleInputChange}
+          type="text"
           margin="normal"
           required
         />
@@ -295,6 +382,7 @@ const AltaProveedor = () => {
           name="numeroCuenta"
           value={formData.numeroCuenta}
           onChange={handleInputChange}
+          type="text"
           margin="normal"
           required
         />
@@ -303,6 +391,7 @@ const AltaProveedor = () => {
           label="CBU"
           name="cbu"
           value={formData.cbu}
+          type="text"
           onChange={handleInputChange}
           margin="normal"
           required
@@ -317,6 +406,7 @@ const AltaProveedor = () => {
             name="tipoProveedor"
             value={formData.tipoProveedor}
             onChange={handleInputChange}
+            type="text"
           >
             {tiposProveedores.map((tipo) => (
               <MenuItem key={tipo} value={tipo}>
@@ -331,6 +421,7 @@ const AltaProveedor = () => {
             name="rubro"
             value={formData.rubro}
             onChange={handleInputChange}
+            type="text"
           >
             {rubros.map((rubro) => (
               <MenuItem key={rubro} value={rubro}>
@@ -362,6 +453,7 @@ const AltaProveedor = () => {
         <TextField
           fullWidth
           label="Calificación"
+          type="number"
           name="calificacion"
           value={formData.calificacion}
           onChange={handleInputChange}
@@ -370,6 +462,7 @@ const AltaProveedor = () => {
         <TextField
           fullWidth
           label="Comentarios"
+          type="text"
           name="comentarios"
           value={formData.comentarios}
           onChange={handleInputChange}

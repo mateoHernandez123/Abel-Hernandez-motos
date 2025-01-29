@@ -108,9 +108,8 @@ create table proveedores(
     rubro VARCHAR(100) not null, 
     calificacion INT , 
     comentarios text,
-    activo bit not null
-)
-
+    activo boolean not null
+);
 
 
 INSERT INTO roles(tipo)
