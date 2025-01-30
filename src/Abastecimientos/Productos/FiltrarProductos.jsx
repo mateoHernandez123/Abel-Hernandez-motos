@@ -23,6 +23,8 @@ import { Context } from "../../context/Context";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 
 const FiltrarProductos = () => {
   const { usuarioAutenticado, deslogear } = useContext(Context);
@@ -225,12 +227,26 @@ const FiltrarProductos = () => {
                   backgroundColor: "#e0e0e0",
                 }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => navigate(`/editar-producto/${row.codigo}`)}
-                >
-                  <EditIcon />
+               <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  navigate(`/editar-producto/${row.codigo}`)
+                }
+                sx={{
+                  marginRight: 1,
+                }}
+              >
+                <EditIcon />
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  navigate(`/visualizar-producto/${row.codigo}`)
+                }
+              >
+                <VisibilityIcon />
                 </Button>
               </TableCell>
             </TableRow>

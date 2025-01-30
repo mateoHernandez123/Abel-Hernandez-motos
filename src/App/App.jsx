@@ -20,6 +20,10 @@ import FiltrarProductos from "../Abastecimientos/Productos/FiltrarProductos.jsx"
 import FiltrarProveedor from "../Abastecimientos/Proveedor/FiltrarProveedor.jsx";
 import EditarProveedor from "../Abastecimientos/Proveedor/EditarProveedor.jsx";
 import EditarProducto from "../Abastecimientos/Productos/EditarProducto.jsx";
+import DetalleSolicitud from "../Abastecimientos/SolicitudDeCompra/DetalleSolicitud.jsx";
+import GeneradorPresupuestos from "../Abastecimientos/Presupuesto/GeneradorPresupuestos.jsx";
+import PresupuestoDetalle from "../Abastecimientos/Presupuesto/PresupuestoDetalle.jsx";
+import VisualizarProducto from "../Abastecimientos/Productos/VisualizarProducto.jsx";
 
 const App = () => {
   return (
@@ -62,6 +66,22 @@ const App = () => {
                   <Route
                     path="/editar-producto/:codigo"
                     element={<EditarProducto />}
+                  />
+                  <Route
+                    path="/detalle-solicitud/:id"
+                    element={<DetalleSolicitud />}
+                  />
+                  <Route
+                    path="/presupuesto/"
+                    element={<GeneradorPresupuestos />}
+                  />
+                  <Route
+                    path="/presupuestos"
+                    element={<PresupuestoDetalle />}
+                  />
+                  <Route
+                    path="/visualizar-producto/:codigo"
+                    element={<VisualizarProducto />}
                   />
                 </Routes>
               </AppLayout>
