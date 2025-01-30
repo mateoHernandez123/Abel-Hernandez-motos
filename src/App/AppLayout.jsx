@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -27,6 +27,8 @@ import ContenedorUsuarioSesion from "../Login/ContenedorUsuarioSesion.jsx";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 const drawerWidth = 240;
 
@@ -132,7 +134,7 @@ const AppLayout = ({ children }) => {
                     sx={{ pl: 4 }}
                   >
                     <ListItemIcon sx={{ color: "yellow" }}>
-                      <AccountBalanceIcon />
+                      <AccountBalanceWalletIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary={"Cuentas"}
@@ -225,7 +227,7 @@ const AppLayout = ({ children }) => {
                     sx={{ pl: 4 }}
                   >
                     <ListItemIcon sx={{ color: "yellow" }}>
-                      <StoreIcon />
+                      <LocalShippingIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary={"Proveedores"}
